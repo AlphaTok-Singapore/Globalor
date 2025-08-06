@@ -79,6 +79,8 @@
   --color-sidebar-selected: hsl(0 0% 91%);
   --color-sidebar-selected-foreground: hsl(0 0% 9%);
   --color-sidebar-ring: hsl(0 0% 63%);
+  --color-sidebar-border: hsl(0 0% 90%);
+  --color-sidebar-muted-foreground: hsl(0 0% 45%);
   --color-container: hsl(0 0% 98.8%);
   --color-container-foreground: hsl(0 0% 4%);
   --color-container-border: hsl(0 0% 90%);
@@ -118,6 +120,24 @@
 }
 
 @layer base {
+  /* 全局重置 */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  #root {
+    height: 100%;
+    width: 100%;
+  }
+
   /* 暗色模式覆盖 */
   .dark {
     --color-background: hsl(0 0% 4%);
@@ -157,6 +177,8 @@
     --color-sidebar-selected: hsl(220 6% 12.5%);
     --color-sidebar-selected-foreground: hsl(0 0% 98%);
     --color-sidebar-ring: hsl(0 0% 32%);
+    --color-sidebar-border: hsl(0 0% 16%);
+    --color-sidebar-muted-foreground: hsl(0 0% 63%);
     --color-container: hsl(220 6% 6.5%);
     --color-container-foreground: hsl(0 0% 98%);
     --color-container-border: hsl(0 0% 16%);
