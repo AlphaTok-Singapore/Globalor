@@ -1,78 +1,101 @@
+import { useState } from 'react';
 import { 
-  Image, 
-  Presentation, 
-  Globe, 
-  FileSpreadsheet, 
-  BarChart3, 
-  MoreHorizontal
+  Linkedin,
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  Github
 } from 'lucide-react';
 import { Button } from '@/components/ui/base/button';
-import { useLanguage } from '../contexts/LanguageContext';
+
 
 interface ActionButtonsProps {
   onAction?: (actionId: string) => void;
 }
 
 export function ActionButtons({ onAction = () => {} }: ActionButtonsProps) {
-  const { t } = useLanguage();
+  const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+
+  const handlePlatformClick = (platform: string) => {
+    setSelectedPlatform(platform);
+    onAction(platform);
+  };
 
   return (
     <div className="flex items-center justify-center gap-3 p-8 bg-background">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-6">
         <Button 
-          variant="outline" 
+          variant={selectedPlatform === 'linkedin' ? "default" : "ghost"}
           size="sm" 
-          className="h-11 px-4 gap-2"
-          onClick={() => onAction('image')}
+          className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+            selectedPlatform === 'linkedin' 
+              ? 'bg-blue-600 text-white shadow-lg scale-110' 
+              : 'hover:bg-gray-100 hover:scale-105'
+          }`}
+          onClick={() => handlePlatformClick('linkedin')}
         >
-          <Image className="h-5 w-5" />
-          <span className="text-base">{t.actions.image}</span>
+          <Linkedin className="h-8 w-8" />
         </Button>
         <Button 
-          variant="outline" 
+          variant={selectedPlatform === 'facebook' ? "default" : "ghost"}
           size="sm" 
-          className="h-11 px-4 gap-2"
-          onClick={() => onAction('slides')}
+          className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+            selectedPlatform === 'facebook' 
+              ? 'bg-blue-700 text-white shadow-lg scale-110' 
+              : 'hover:bg-gray-100 hover:scale-105'
+          }`}
+          onClick={() => handlePlatformClick('facebook')}
         >
-          <Presentation className="h-5 w-5" />
-          <span className="text-base">{t.actions.slides}</span>
+          <Facebook className="h-8 w-8" />
         </Button>
         <Button 
-          variant="outline" 
+          variant={selectedPlatform === 'instagram' ? "default" : "ghost"}
           size="sm" 
-          className="h-11 px-4 gap-2"
-          onClick={() => onAction('webpage')}
+          className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+            selectedPlatform === 'instagram' 
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-110' 
+              : 'hover:bg-gray-100 hover:scale-105'
+          }`}
+          onClick={() => handlePlatformClick('instagram')}
         >
-          <Globe className="h-5 w-5" />
-          <span className="text-base">{t.actions.webpage}</span>
+          <Instagram className="h-8 w-8" />
         </Button>
         <Button 
-          variant="outline" 
+          variant={selectedPlatform === 'twitter' ? "default" : "ghost"}
           size="sm" 
-          className="h-11 px-4 gap-2 relative"
-          onClick={() => onAction('spreadsheet')}
+          className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+            selectedPlatform === 'twitter' 
+              ? 'bg-blue-400 text-white shadow-lg scale-110' 
+              : 'hover:bg-gray-100 hover:scale-105'
+          }`}
+          onClick={() => handlePlatformClick('twitter')}
         >
-          <FileSpreadsheet className="h-5 w-5" />
-          <span className="text-base">{t.actions.spreadsheet}</span>
-          <span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs px-1 rounded">{t.actions.new}</span>
+          <Twitter className="h-8 w-8" />
         </Button>
         <Button 
-          variant="outline" 
+          variant={selectedPlatform === 'youtube' ? "default" : "ghost"}
           size="sm" 
-          className="h-11 px-4 gap-2"
-          onClick={() => onAction('visualization')}
+          className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+            selectedPlatform === 'youtube' 
+              ? 'bg-red-600 text-white shadow-lg scale-110' 
+              : 'hover:bg-gray-100 hover:scale-105'
+          }`}
+          onClick={() => handlePlatformClick('youtube')}
         >
-          <BarChart3 className="h-5 w-5" />
-          <span className="text-base">{t.actions.visualization}</span>
+          <Youtube className="h-8 w-8" />
         </Button>
         <Button 
-          variant="outline" 
+          variant={selectedPlatform === 'github' ? "default" : "ghost"}
           size="sm" 
-          className="h-11 px-4 gap-2"
-          onClick={() => onAction('more')}
+          className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+            selectedPlatform === 'github' 
+              ? 'bg-gray-800 text-white shadow-lg scale-110' 
+              : 'hover:bg-gray-100 hover:scale-105'
+          }`}
+          onClick={() => handlePlatformClick('github')}
         >
-          <MoreHorizontal className="h-5 w-5" />
-          <span className="text-base">{t.actions.more}</span>
+          <Github className="h-8 w-8" />
         </Button>
       </div>
     </div>

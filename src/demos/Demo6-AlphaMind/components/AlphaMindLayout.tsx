@@ -11,7 +11,13 @@ import {
   Edit,
   Heart,
   Trash2,
-  MoreVertical
+  MoreVertical,
+  Linkedin,
+  Facebook,
+  Instagram,
+  Twitter,
+  Youtube,
+  Github
 } from 'lucide-react';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { LanguageDialog } from './LanguageDialog';
@@ -31,13 +37,27 @@ interface AlphaMindLayoutProps {
   user?: User;
   onSendMessage?: (message: string) => void;
   onAction?: (actionId: string) => void;
+  onClearMessages?: () => void;
+  onNewTask?: () => void;
+  tasks?: Array<{
+    id: string;
+    title: string;
+    messages: ChatMessage[];
+    createdAt: Date;
+    isActive: boolean;
+  }>;
+  currentTaskId?: string | null;
 }
 
 function AlphaMindLayoutContent({ 
   messages = [], 
   user, 
   onSendMessage = () => {}, 
-  onAction = () => {} 
+  onAction = () => {}, 
+  onClearMessages = () => {}, 
+  onNewTask = () => {},
+  tasks = [],
+  currentTaskId = null
 }: AlphaMindLayoutProps) {
   const { t, isLanguageDialogVisible, hideLanguageDialog, suggestedLanguage, setLanguage } = useLanguage();
   const [isTaskListCollapsed, setIsTaskListCollapsed] = useState(false);
@@ -48,6 +68,7 @@ function AlphaMindLayoutContent({
   const [isPhoneFullscreen, setIsPhoneFullscreen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const sidebarRef = useRef<HTMLDivElement>(null);
 
   const handleToggleTaskList = () => {
     setIsTaskListCollapsed(!isTaskListCollapsed);
@@ -79,6 +100,10 @@ function AlphaMindLayoutContent({
     setShowSettings(false);
   };
 
+  const handleOpenSettings = () => {
+    setShowSettings(true);
+  };
+
   const handleAction = (actionId: string) => {
     setSelectedAction(actionId);
     onAction(actionId);
@@ -101,6 +126,19 @@ function AlphaMindLayoutContent({
     }
   };
 
+  const handleNewTask = () => {
+    // 清理消息并开始新任务
+    onClearMessages();
+    setSelectedAction(null);
+    setWelcomeInputValue('');
+    // 回到默认页面（chat 页面）
+    setCurrentPage('chat');
+    // 重置所有相关状态
+    setIsPhoneFullscreen(false);
+    setShowSettings(false);
+    onNewTask();
+  };
+
   const getSidebarWidth = () => {
     if (isTaskListCollapsed) return 'w-0';
     return 'w-80';
@@ -108,9 +146,16 @@ function AlphaMindLayoutContent({
 
   const getSidebarStyle = () => {
     if (isTaskListCollapsed) {
-      return 'fixed left-0 top-0 h-full bg-sidebar border-r border-sidebar-border transform -translate-x-full transition-transform duration-300 ease-in-out z-30';
+      return 'fixed left-0 top-0 h-full transform -translate-x-full transition-transform duration-300 ease-in-out z-30';
     }
-    return 'fixed left-0 top-0 h-full bg-sidebar border-r border-sidebar-border transition-all duration-300 ease-in-out z-30';
+    return 'fixed left-0 top-0 h-full transition-all duration-300 ease-in-out z-30';
+  };
+
+  const getCollapsedSidebarStyle = () => {
+    if (isTaskListCollapsed && isHovering) {
+      return 'fixed left-4 top-4 h-[calc(100vh-2rem)] w-80 bg-sidebar border border-sidebar-border rounded-xl shadow-2xl transition-all duration-300 ease-in-out z-40 transform translate-x-0';
+    }
+    return 'fixed left-4 top-4 h-[calc(100vh-2rem)] w-80 bg-sidebar border border-sidebar-border rounded-xl shadow-2xl transition-all duration-300 ease-in-out z-40 transform -translate-x-full';
   };
 
   const renderPageContent = () => {
@@ -162,13 +207,55 @@ function AlphaMindLayoutContent({
               </div>
             </div>
             <div className="flex items-center justify-center gap-2 px-8 py-6 bg-background">
-              <div className="flex items-center gap-3 max-w-2xl">
-                <Button variant="outline" size="sm" onClick={() => handleAction('image')} className="h-11 px-4 gap-2"><svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span className="text-base">{t.actions.image}</span></Button>
-                <Button variant="outline" size="sm" onClick={() => handleAction('slides')} className="h-11 px-4 gap-2"><svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><span className="text-base">{t.actions.slides}</span></Button>
-                <Button variant="outline" size="sm" onClick={() => handleAction('webpage')} className="h-11 px-4 gap-2"><svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9" /></svg><span className="text-base">{t.actions.webpage}</span></Button>
-                <Button variant="outline" size="sm" onClick={() => handleAction('spreadsheet')} className="h-11 px-4 gap-2 relative"><svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg><span className="text-base">{t.actions.spreadsheet}</span><span className="absolute -top-1 -right-1 bg-blue-500 text-white text-xs px-1 rounded">{t.actions.new}</span></Button>
-                <Button variant="outline" size="sm" onClick={() => handleAction('visualization')} className="h-11 px-4 gap-2"><svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg><span className="text-base">{t.actions.visualization}</span></Button>
-                <Button variant="outline" size="sm" onClick={() => handleAction('more')} className="h-11 px-4 gap-2"><svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg><span className="text-base">{t.actions.more}</span></Button>
+              <div className="flex items-center gap-6 max-w-4xl">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  onClick={() => handleAction('linkedin')}
+                >
+                  <Linkedin className="h-8 w-8 text-blue-600" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  onClick={() => handleAction('facebook')}
+                >
+                  <Facebook className="h-8 w-8 text-blue-700" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  onClick={() => handleAction('instagram')}
+                >
+                  <Instagram className="h-8 w-8 text-pink-600" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  onClick={() => handleAction('twitter')}
+                >
+                  <Twitter className="h-8 w-8 text-blue-400" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  onClick={() => handleAction('youtube')}
+                >
+                  <Youtube className="h-8 w-8 text-red-600" />
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  onClick={() => handleAction('github')}
+                >
+                  <Github className="h-8 w-8 text-gray-700" />
+                </Button>
               </div>
             </div>
             <div className="flex justify-end">
@@ -282,7 +369,7 @@ function AlphaMindLayoutContent({
               size="sm"
               onClick={() => setIsPhoneFullscreen(true)}
               className="h-8 w-8 p-0 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
-              title="全屏显示"
+              title="Fullscreen"
             >
               <Maximize2 className="h-4 w-4" />
             </Button>
@@ -291,7 +378,7 @@ function AlphaMindLayoutContent({
               size="sm"
               onClick={() => setSelectedAction(null)}
               className="h-8 w-8 p-0 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
-              title="关闭显示"
+              title="Close"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -396,7 +483,7 @@ function AlphaMindLayoutContent({
             size="sm"
             onClick={() => setIsPhoneFullscreen(false)}
             className="absolute top-4 right-4 h-8 w-8 p-0 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
-            title="关闭全屏"
+            title="Close Fullscreen"
           >
             <X className="h-4 w-4" />
           </Button>
@@ -407,50 +494,102 @@ function AlphaMindLayoutContent({
 
   return (
     <div className="h-screen w-screen flex overflow-hidden">
-      {/* Task List Sidebar */}
-      <div className={`${getSidebarWidth()} ${getSidebarStyle()}`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-        <Sidebar
-          isCollapsed={isTaskListCollapsed}
-          onSelectTask={handleTaskSelect}
-          currentPage={currentPage}
-          onNavigate={handleNavigate}
-          messages={messages}
-        />
-        {!isTaskListCollapsed && (
+      {/* 鼠标悬停区域 - 用于检测鼠标进入 */}
+      <div 
+        className="fixed left-0 top-0 w-4 h-full z-20"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
+
+      {/* 展开状态的 Sidebar */}
+      {!isTaskListCollapsed && (
+        <div className={`${getSidebarWidth()} ${getSidebarStyle()}`} ref={sidebarRef}>
+          <Sidebar
+            isCollapsed={isTaskListCollapsed}
+            onSelectTask={handleTaskSelect}
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            messages={messages}
+            onToggleCollapse={handleToggleTaskList}
+            onNewTask={handleNewTask}
+            onOpenSettings={handleOpenSettings}
+            tasks={tasks}
+            currentTaskId={currentTaskId}
+          />
           <div className="absolute left-4 top-4 z-10">
-            <Button variant="outline" size="sm" onClick={handleToggleTaskList} className="h-8 w-8 p-0 rounded-full bg-background border-2 border-border shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110" title="收起侧边栏">
+            <Button variant="outline" size="sm" onClick={handleToggleTaskList} className="h-8 w-8 p-0 rounded-full bg-background border-2 border-border shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110" title="Collapse Sidebar">
               <DoorClosed className="h-4 w-4" />
             </Button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
+
+      {/* 收缩状态的 Sidebar - 带圆角和间距 */}
+      {isTaskListCollapsed && (
+        <div 
+          className={getCollapsedSidebarStyle()}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          ref={sidebarRef}
+        >
+          <Sidebar
+            isCollapsed={false}
+            onSelectTask={handleTaskSelect}
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            messages={messages}
+            onToggleCollapse={handleToggleTaskList}
+            onNewTask={handleNewTask}
+            onOpenSettings={handleOpenSettings}
+            tasks={tasks}
+            currentTaskId={currentTaskId}
+          />
+        </div>
+      )}
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col h-full">
+      <div className="flex-1 flex flex-col h-full bg-background">
         {/* Top header - Fixed height */}
         <div className="flex-shrink-0 h-16">
           <TopHeader user={user} isSidebarCollapsed={isTaskListCollapsed} />
         </div>
 
+        {/* 公司 Logo - 只在 sidebar 打开或弹出时显示 */}
+        {(!isTaskListCollapsed || isHovering) && (
+          <div className="flex-shrink-0 p-4 bg-background border-b border-border">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
+                <span className="text-white text-lg font-bold">A</span>
+              </div>
+              <div>
+                <div className="text-lg font-semibold text-foreground">AlphaMind</div>
+                <div className="text-sm text-muted-foreground">AI Assistant Platform</div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Page content - Split layout when action selected */}
         {selectedAction ? (
           <div className="flex-1 flex">
-            {/* Left chat area */}
-            <div className="flex-1 flex flex-col">
+            {/* Left chat area - 确保不被 sidebar 遮挡 */}
+            <div className={`flex-1 flex flex-col ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>
               {renderPageContent()}
             </div>
             {/* Right phone display area */}
             {renderPhoneDisplay()}
           </div>
         ) : (
-          renderPageContent()
+          <div className={`flex-1 ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>
+            {renderPageContent()}
+          </div>
         )}
       </div>
 
-      {/* Floating expand button */}
+      {/* Floating expand button - 只在收缩且未悬停时显示 */}
       {isTaskListCollapsed && !isHovering && (
         <div className="fixed left-4 top-4 z-20">
-          <Button variant="outline" size="sm" onClick={handleToggleTaskList} className="h-8 w-8 p-0 rounded-full bg-background border-2 border-border shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110" title="展开侧边栏">
+          <Button variant="outline" size="sm" onClick={handleToggleTaskList} className="h-8 w-8 p-0 rounded-full bg-background border-2 border-border shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-110" title="Expand Sidebar">
             <DoorOpen className="h-4 w-4" />
           </Button>
         </div>

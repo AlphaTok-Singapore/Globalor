@@ -122,11 +122,18 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                       onChange={(e) => handleLanguageChange(e.target.value)}
                       className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     >
-                      <option value="English">English</option>
-                      <option value="中文 (简体)">中文 (简体)</option>
-                      <option value="Bahasa Melayu">Bahasa Melayu</option>
-                      <option value="ภาษาไทย">ภาษาไทย</option>
-                      <option value="Bahasa Indonesia">Bahasa Indonesia</option>
+                      <option value="English">🇺🇸 English</option>
+                      <option value="中文 (简体)">🇨🇳 中文 (简体)</option>
+                      <option value="Bahasa Melayu">🇲🇾 Bahasa Melayu</option>
+                      <option value="ภาษาไทย">🇹🇭 ภาษาไทย</option>
+                      <option value="Bahasa Indonesia">🇮🇩 Bahasa Indonesia</option>
+                      <option value="Tiếng Việt">🇻🇳 Tiếng Việt</option>
+                      <option value="Filipino">🇵🇭 Filipino</option>
+                      <option value="हिन्दी">🇮🇳 हिन्दी</option>
+                      <option value="한국어">🇰🇷 한국어</option>
+                      <option value="日本語">🇯🇵 日本語</option>
+                      <option value="العربية">🇸🇦 العربية</option>
+                      <option value="עברית">🇮🇱 עברית</option>
                     </select>
                     <Globe className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   </div>

@@ -10,10 +10,37 @@ const mockUser: User = {
   avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
 };
 
+// 任务类型
+interface Task {
+  id: string;
+  title: string;
+  messages: ChatMessage[];
+  createdAt: Date;
+  isActive: boolean;
+}
+
 export function AlphaMindPage() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
+
+  // 获取当前活跃任务的消息
+  const currentTask = tasks.find(task => task.id === currentTaskId);
+  const messages = currentTask?.messages || [];
 
   const handleSendMessage = (message: string) => {
+    if (!currentTaskId) {
+      // 如果没有活跃任务，创建一个新任务
+      const newTask: Task = {
+        id: Date.now().toString(),
+        title: `对话 ${tasks.length + 1}`,
+        messages: [],
+        createdAt: new Date(),
+        isActive: true,
+      };
+      setTasks(prev => [...prev, newTask]);
+      setCurrentTaskId(newTask.id);
+    }
+
     const newMessage: ChatMessage = {
       id: Date.now().toString(),
       content: message,
@@ -21,7 +48,12 @@ export function AlphaMindPage() {
       timestamp: new Date(),
     };
     
-    setMessages(prev => [...prev, newMessage]);
+    // 更新当前任务的消息
+    setTasks(prev => prev.map(task => 
+      task.id === currentTaskId 
+        ? { ...task, messages: [...task.messages, newMessage] }
+        : task
+    ));
     
     // 模拟 AI 回复
     setTimeout(() => {
@@ -31,8 +63,41 @@ export function AlphaMindPage() {
         type: 'assistant',
         timestamp: new Date(),
       };
-      setMessages(prev => [...prev, aiResponse]);
+      setTasks(prev => prev.map(task => 
+        task.id === currentTaskId 
+          ? { ...task, messages: [...task.messages, aiResponse] }
+          : task
+      ));
     }, 1000);
+  };
+
+  const handleClearMessages = () => {
+    // 清理当前任务的消息
+    if (currentTaskId) {
+      setTasks(prev => prev.map(task => 
+        task.id === currentTaskId 
+          ? { ...task, messages: [] }
+          : task
+      ));
+    }
+  };
+
+  const handleNewTask = () => {
+    // 创建新任务
+    const newTask: Task = {
+      id: Date.now().toString(),
+      title: `对话 ${tasks.length + 1}`,
+      messages: [],
+      createdAt: new Date(),
+      isActive: true,
+    };
+    
+    // 将当前任务设为非活跃
+    setTasks(prev => prev.map(task => ({ ...task, isActive: false })));
+    
+    // 添加新任务并设为当前任务
+    setTasks(prev => [...prev, newTask]);
+    setCurrentTaskId(newTask.id);
   };
 
   const handleAction = (actionId: string) => {
@@ -46,6 +111,10 @@ export function AlphaMindPage() {
       messages={messages}
       onSendMessage={handleSendMessage}
       onAction={handleAction}
+      onClearMessages={handleClearMessages}
+      onNewTask={handleNewTask}
+      tasks={tasks}
+      currentTaskId={currentTaskId}
     />
   );
 } 
