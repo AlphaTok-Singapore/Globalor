@@ -164,7 +164,8 @@ const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<AlphaMindPage />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/alphamind" element={<AlphaMindPage />} />
       </Routes>
     </BrowserRouter>

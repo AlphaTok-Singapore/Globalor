@@ -83,30 +83,30 @@ export function TopHeader({ user, isSidebarCollapsed = false }: TopHeaderProps) 
   }, [showCountryDropdown, showUserDropdown]);
 
   return (
-    <div className="flex items-center justify-between p-4 bg-background">
+    <div className="flex items-center justify-between px-4 py-2 bg-background">
       {/* 左侧 - Logo 和名称 */}
-      <div className="flex items-center gap-4">
-        <div className={`flex items-center gap-2 ${isSidebarCollapsed ? 'ml-12' : ''}`}>
-          <div className="w-6 h-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded flex items-center justify-center">
+      <div className="flex items-center gap-3">
+        <div className={`flex items-center gap-2 ${isSidebarCollapsed ? 'ml-8' : ''}`}>
+          <div className="w-4 h-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded flex items-center justify-center">
             <span className="text-white text-xs font-bold">A</span>
           </div>
-          <Typography variant="body" className="font-semibold text-lg">
+          <Typography variant="body" className="font-semibold text-sm">
             AlphaMind
           </Typography>
         </div>
       </div>
 
       {/* 右侧 - 通知、国家选择器和用户头像 */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         {/* 计分按钮 */}
-        <Button variant="outline" size="sm" className="h-8 px-3 gap-2 border-blue-300 bg-blue-50 hover:bg-blue-100">
-          <Coins className="h-4 w-4 text-blue-600" />
-          <span className="text-sm font-medium text-blue-700">1,250</span>
+        <Button variant="outline" size="sm" className="h-6 px-2 gap-1 border-blue-300 bg-blue-50 hover:bg-blue-100">
+          <Coins className="h-3 w-3 text-blue-600" />
+          <span className="text-xs font-medium text-blue-700">1,250</span>
         </Button>
 
         {/* 通知按钮 */}
-        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-          <Bell className="h-4 w-4" />
+        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+          <Bell className="h-3 w-3" />
         </Button>
 
         {/* 国家选择器 */}
@@ -115,11 +115,11 @@ export function TopHeader({ user, isSidebarCollapsed = false }: TopHeaderProps) 
             variant="outline"
             size="sm"
             onClick={() => setShowCountryDropdown(!showCountryDropdown)}
-            className="h-8 px-3 gap-2 border-gray-300 hover:border-gray-400"
+            className="h-6 px-2 gap-1 border-gray-300 hover:border-gray-400"
           >
-            <span className="text-lg">{selectedCountry.flag}</span>
-            <span className="text-sm font-medium">{selectedCountry.code}</span>
-            <span className="text-sm text-gray-600">{selectedCountry.name}</span>
+            <span className="text-base">{selectedCountry.flag}</span>
+            <span className="text-xs font-medium">{selectedCountry.code}</span>
+            <span className="text-xs text-gray-600">{selectedCountry.name}</span>
             <ChevronDown 
               className={`h-3 w-3 transition-transform ${showCountryDropdown ? 'rotate-180' : ''}`} 
             />
@@ -160,17 +160,17 @@ export function TopHeader({ user, isSidebarCollapsed = false }: TopHeaderProps) 
             variant="ghost"
             size="sm"
             onClick={() => setShowUserDropdown(!showUserDropdown)}
-            className="h-8 w-8 p-0 rounded-full overflow-hidden"
+            className="h-6 w-6 p-0 rounded-full overflow-hidden"
           >
             {user?.avatar ? (
               <img 
                 src={user.avatar} 
                 alt={user.name || 'User'} 
-                className="h-8 w-8 object-cover"
+                className="h-6 w-6 object-cover"
               />
             ) : (
-              <div className="h-8 w-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
-                <UserIcon className="h-4 w-4 text-white" />
+              <div className="h-6 w-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                <UserIcon className="h-3 w-3 text-white" />
               </div>
             )}
           </Button>

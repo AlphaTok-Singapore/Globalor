@@ -209,52 +209,76 @@ function AlphaMindLayoutContent({
             <div className="flex items-center justify-center gap-2 px-8 py-6 bg-background">
               <div className="flex items-center gap-6 max-w-4xl">
                 <Button 
-                  variant="ghost" 
+                  variant={selectedAction === 'linkedin' ? 'default' : 'ghost'}
                   size="sm" 
-                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                    selectedAction === 'linkedin' 
+                      ? 'bg-blue-600 text-white shadow-lg scale-110' 
+                      : 'hover:bg-gray-100 hover:scale-105'
+                  }`}
                   onClick={() => handleAction('linkedin')}
                 >
-                  <Linkedin className="h-8 w-8 text-blue-600" />
+                  <Linkedin className="h-8 w-8" />
                 </Button>
                 <Button 
-                  variant="ghost" 
+                  variant={selectedAction === 'facebook' ? 'default' : 'ghost'}
                   size="sm" 
-                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                    selectedAction === 'facebook' 
+                      ? 'bg-blue-700 text-white shadow-lg scale-110' 
+                      : 'hover:bg-gray-100 hover:scale-105'
+                  }`}
                   onClick={() => handleAction('facebook')}
                 >
-                  <Facebook className="h-8 w-8 text-blue-700" />
+                  <Facebook className="h-8 w-8" />
                 </Button>
                 <Button 
-                  variant="ghost" 
+                  variant={selectedAction === 'instagram' ? 'default' : 'ghost'}
                   size="sm" 
-                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                    selectedAction === 'instagram' 
+                      ? 'bg-pink-600 text-white shadow-lg scale-110' 
+                      : 'hover:bg-gray-100 hover:scale-105'
+                  }`}
                   onClick={() => handleAction('instagram')}
                 >
-                  <Instagram className="h-8 w-8 text-pink-600" />
+                  <Instagram className="h-8 w-8" />
                 </Button>
                 <Button 
-                  variant="ghost" 
+                  variant={selectedAction === 'twitter' ? 'default' : 'ghost'}
                   size="sm" 
-                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                    selectedAction === 'twitter' 
+                      ? 'bg-blue-400 text-white shadow-lg scale-110' 
+                      : 'hover:bg-gray-100 hover:scale-105'
+                  }`}
                   onClick={() => handleAction('twitter')}
                 >
-                  <Twitter className="h-8 w-8 text-blue-400" />
+                  <Twitter className="h-8 w-8" />
                 </Button>
                 <Button 
-                  variant="ghost" 
+                  variant={selectedAction === 'youtube' ? 'default' : 'ghost'}
                   size="sm" 
-                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                    selectedAction === 'youtube' 
+                      ? 'bg-red-600 text-white shadow-lg scale-110' 
+                      : 'hover:bg-gray-100 hover:scale-105'
+                  }`}
                   onClick={() => handleAction('youtube')}
                 >
-                  <Youtube className="h-8 w-8 text-red-600" />
+                  <Youtube className="h-8 w-8" />
                 </Button>
                 <Button 
-                  variant="ghost" 
+                  variant={selectedAction === 'github' ? 'default' : 'ghost'}
                   size="sm" 
-                  className="h-16 w-16 p-0 rounded-full hover:bg-gray-100 hover:scale-105 transition-all duration-200"
+                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                    selectedAction === 'github' 
+                      ? 'bg-gray-700 text-white shadow-lg scale-110' 
+                      : 'hover:bg-gray-100 hover:scale-105'
+                  }`}
                   onClick={() => handleAction('github')}
                 >
-                  <Github className="h-8 w-8 text-gray-700" />
+                  <Github className="h-8 w-8" />
                 </Button>
               </div>
             </div>
@@ -437,7 +461,7 @@ function AlphaMindLayoutContent({
 
     return (
       <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
-        <div className="relative w-96 h-[600px] bg-white rounded-2xl shadow-2xl overflow-hidden">
+        <div className="relative w-[500px] h-[700px] bg-white rounded-2xl shadow-2xl overflow-hidden">
           {/* Phone Header */}
           <div className="bg-gray-100 px-6 py-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -550,13 +574,13 @@ function AlphaMindLayoutContent({
       {/* Main content */}
       <div className="flex-1 flex flex-col h-full bg-background">
         {/* Top header - Fixed height */}
-        <div className="flex-shrink-0 h-16">
+        <div className="flex-shrink-0 h-12">
           <TopHeader user={user} isSidebarCollapsed={isTaskListCollapsed} />
         </div>
 
         {/* 公司 Logo - 只在 sidebar 打开或弹出时显示 */}
         {(!isTaskListCollapsed || isHovering) && (
-          <div className="flex-shrink-0 p-4 bg-background border-b border-border">
+          <div className="flex-shrink-0 p-4 bg-background">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-lg flex items-center justify-center">
                 <span className="text-white text-lg font-bold">A</span>
