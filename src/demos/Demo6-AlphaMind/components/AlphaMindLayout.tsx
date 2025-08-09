@@ -18,6 +18,10 @@ import {
   Twitter,
   Youtube,
   Github,
+  Mail,
+  MessageCircle,
+  Send,
+  MessageSquare,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -69,6 +73,7 @@ function AlphaMindLayoutContent({
   const [selectedAction, setSelectedAction] = useState<string | null>(null);
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [currentPlatformIndex, setCurrentPlatformIndex] = useState<number>(0);
+  const [welcomeMode, setWelcomeMode] = useState<'public' | 'private'>('public');
   const [isPhoneFullscreen, setIsPhoneFullscreen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState<string>('');
@@ -112,8 +117,13 @@ function AlphaMindLayoutContent({
 
   const handleAction = (actionId: string) => {
     setSelectedPlatforms((prev) => {
+      const isPrivateSingleSelect = welcomeMode === 'private';
       const willSelect = !prev.includes(actionId);
-      const next = willSelect ? [...prev, actionId] : prev.filter((p) => p !== actionId);
+      const next = isPrivateSingleSelect
+        ? [actionId]
+        : willSelect
+          ? [...prev, actionId]
+          : prev.filter((p) => p !== actionId);
       if (next.length === 0) {
         setSelectedAction(null);
         setCurrentPlatformIndex(0);
@@ -452,9 +462,6 @@ function AlphaMindLayoutContent({
           <div className="flex-shrink-0">
             <InputArea onSendMessage={onSendMessage} />
           </div>
-          <div className="flex-shrink-0">
-            <ActionButtons onAction={handleAction} />
-          </div>
         </>
       );
     } else {
@@ -486,80 +493,152 @@ function AlphaMindLayoutContent({
                 </Button>
               </div>
             </div>
+            {/* Public / Private toggle under welcome input */}
+            <div className="flex items-center justify-center gap-3">
+              <Button
+                variant={welcomeMode === 'public' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setWelcomeMode('public')}
+              >
+                Public
+              </Button>
+              <Button
+                variant={welcomeMode === 'private' ? 'default' : 'ghost'}
+                size="sm"
+                onClick={() => setWelcomeMode('private')}
+              >
+                Private
+              </Button>
+            </div>
             <div className="flex items-center justify-center gap-2 px-8 py-6 bg-background">
               <div className="flex items-center gap-6 max-w-4xl">
-                <Button 
-                  variant={selectedPlatforms.includes('linkedin') ? 'default' : 'ghost'}
-                  size="sm" 
-                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                    selectedPlatforms.includes('linkedin') 
-                      ? 'bg-blue-600 text-white shadow-lg scale-110' 
-                      : 'hover:bg-gray-100 hover:scale-105'
-                  }`}
-                  onClick={() => handleAction('linkedin')}
-                >
-                  <Linkedin className="h-8 w-8" />
-                </Button>
-                <Button 
-                  variant={selectedPlatforms.includes('facebook') ? 'default' : 'ghost'}
-                  size="sm" 
-                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                    selectedPlatforms.includes('facebook') 
-                      ? 'bg-blue-700 text-white shadow-lg scale-110' 
-                      : 'hover:bg-gray-100 hover:scale-105'
-                  }`}
-                  onClick={() => handleAction('facebook')}
-                >
-                  <Facebook className="h-8 w-8" />
-                </Button>
-                <Button 
-                  variant={selectedPlatforms.includes('instagram') ? 'default' : 'ghost'}
-                  size="sm" 
-                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                    selectedPlatforms.includes('instagram') 
-                      ? 'bg-pink-600 text-white shadow-lg scale-110' 
-                      : 'hover:bg-gray-100 hover:scale-105'
-                  }`}
-                  onClick={() => handleAction('instagram')}
-                >
-                  <Instagram className="h-8 w-8" />
-                </Button>
-                <Button 
-                  variant={selectedPlatforms.includes('twitter') ? 'default' : 'ghost'}
-                  size="sm" 
-                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                    selectedPlatforms.includes('twitter') 
-                      ? 'bg-blue-400 text-white shadow-lg scale-110' 
-                      : 'hover:bg-gray-100 hover:scale-105'
-                  }`}
-                  onClick={() => handleAction('twitter')}
-                >
-                  <Twitter className="h-8 w-8" />
-                </Button>
-                <Button 
-                  variant={selectedPlatforms.includes('youtube') ? 'default' : 'ghost'}
-                  size="sm" 
-                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                    selectedPlatforms.includes('youtube') 
-                      ? 'bg-red-600 text-white shadow-lg scale-110' 
-                      : 'hover:bg-gray-100 hover:scale-105'
-                  }`}
-                  onClick={() => handleAction('youtube')}
-                >
-                  <Youtube className="h-8 w-8" />
-                </Button>
-                <Button 
-                  variant={selectedPlatforms.includes('github') ? 'default' : 'ghost'}
-                  size="sm" 
-                  className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                    selectedPlatforms.includes('github') 
-                      ? 'bg-gray-700 text-white shadow-lg scale-110' 
-                      : 'hover:bg-gray-100 hover:scale-105'
-                  }`}
-                  onClick={() => handleAction('github')}
-                >
-                  <Github className="h-8 w-8" />
-                </Button>
+                {welcomeMode === 'public' ? (
+                  <>
+                    <Button 
+                      variant={selectedPlatforms.includes('linkedin') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('linkedin') 
+                          ? 'bg-blue-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('linkedin')}
+                    >
+                      <Linkedin className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('facebook') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('facebook') 
+                          ? 'bg-blue-700 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('facebook')}
+                    >
+                      <Facebook className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('instagram') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('instagram') 
+                          ? 'bg-pink-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('instagram')}
+                    >
+                      <Instagram className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('twitter') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('twitter') 
+                          ? 'bg-blue-400 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('twitter')}
+                    >
+                      <Twitter className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('youtube') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('youtube') 
+                          ? 'bg-red-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('youtube')}
+                    >
+                      <Youtube className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('github') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('github') 
+                          ? 'bg-gray-700 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('github')}
+                    >
+                      <Github className="h-8 w-8" />
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button 
+                      variant={selectedPlatforms.includes('email') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('email') 
+                          ? 'bg-blue-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('email')}
+                    >
+                      <Mail className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('whatsapp') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('whatsapp') 
+                          ? 'bg-green-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('whatsapp')}
+                    >
+                      <MessageCircle className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('telegram') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('telegram') 
+                          ? 'bg-sky-500 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('telegram')}
+                    >
+                      <Send className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('line') ? 'default' : 'ghost'}
+                      size="sm" 
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('line') 
+                          ? 'bg-green-500 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('line')}
+                    >
+                      <MessageSquare className="h-8 w-8" />
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
             <div className="flex justify-end">

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Input } from '@/components/ui/data-entry/input';
 import { Button } from '@/components/ui/base/button';
 import { Send, Bot, Mic } from 'lucide-react';
+import { ActionButtons } from './ActionButtons';
 
 interface InputAreaProps {
   onSendMessage: (message: string) => void;
@@ -10,6 +11,7 @@ interface InputAreaProps {
 
 export function InputArea({ onSendMessage, placeholder = "Ask anything..." }: InputAreaProps) {
   const [inputValue, setInputValue] = useState('');
+  const [mode, setMode] = useState<'public' | 'private'>('public');
 
   const handleSend = () => {
     if (inputValue.trim()) {
@@ -26,7 +28,7 @@ export function InputArea({ onSendMessage, placeholder = "Ask anything..." }: In
   };
 
   return (
-    <div className="flex items-center justify-center gap-3 p-8 bg-background">
+    <div className="flex flex-col items-center justify-center gap-4 p-8 bg-background">
       <div className="relative max-w-2xl w-full">
         <div className="relative">
           <Input
@@ -58,6 +60,27 @@ export function InputArea({ onSendMessage, placeholder = "Ask anything..." }: In
           </Button>
         </div>
       </div>
+
+      {/* Mode toggle under input */}
+      <div className="flex items-center gap-2">
+        <Button
+          variant={mode === 'public' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setMode('public')}
+        >
+          Public
+        </Button>
+        <Button
+          variant={mode === 'private' ? 'default' : 'ghost'}
+          size="sm"
+          onClick={() => setMode('private')}
+        >
+          Private
+        </Button>
+      </div>
+
+      {/* Action buttons under input - switch by mode */}
+      <ActionButtons mode={mode} onAction={() => {}} />
     </div>
   );
 } 
