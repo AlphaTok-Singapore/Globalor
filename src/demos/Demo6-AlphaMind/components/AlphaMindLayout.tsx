@@ -7,21 +7,18 @@ import {
   ChevronUp,
   Maximize2,
   X,
-  Share,
-  Edit,
-  Heart,
-  Trash2,
-  MoreVertical,
   Linkedin,
   Facebook,
   Instagram,
   Twitter,
   Youtube,
-  Github,
+  StickyNote,
+  Music,
   Mail,
   MessageCircle,
   Send,
   MessageSquare,
+  Briefcase,
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
@@ -31,7 +28,6 @@ import { TopHeader } from './TopHeader';
 import { Sidebar } from './Sidebar';
 import { ChatInterface } from './ChatInterface';
 import { InputArea } from './InputArea';
-import { ActionButtons } from './ActionButtons';
 import { SettingsPage } from './SettingsPage';
 import { AgentsPage } from './AgentsPage';
 import { KnowledgeBasePage } from './KnowledgeBasePage';
@@ -78,6 +74,8 @@ function AlphaMindLayoutContent({
   const [showSettings, setShowSettings] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState<string>('');
   const [youtubeVideoId, setYoutubeVideoId] = useState<string>('');
+  const [showEmailDialog, setShowEmailDialog] = useState(false);
+  const [emailDialogType, setEmailDialogType] = useState<string>('');
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -111,11 +109,24 @@ function AlphaMindLayoutContent({
     setShowSettings(false);
   };
 
+  const handleCloseEmailDialog = () => {
+    setShowEmailDialog(false);
+    setEmailDialogType('');
+  };
+
   const handleOpenSettings = () => {
     setShowSettings(true);
   };
 
   const handleAction = (actionId: string) => {
+    // Check if this is a private mode action
+    const privateActions = ['email', 'whatsapp', 'telegram', 'line', 'crm'];
+    if (welcomeMode === 'private' && privateActions.includes(actionId)) {
+      setShowEmailDialog(true);
+      setEmailDialogType(actionId);
+      return;
+    }
+
     setSelectedPlatforms((prev) => {
       const isPrivateSingleSelect = welcomeMode === 'private';
       const willSelect = !prev.includes(actionId);
@@ -517,6 +528,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('linkedin') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="LinkedIn"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('linkedin') 
                           ? 'bg-blue-600 text-white shadow-lg scale-110' 
@@ -529,6 +541,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('facebook') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="Facebook"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('facebook') 
                           ? 'bg-blue-700 text-white shadow-lg scale-110' 
@@ -541,6 +554,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('instagram') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="Instagram"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('instagram') 
                           ? 'bg-pink-600 text-white shadow-lg scale-110' 
@@ -553,6 +567,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('twitter') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="Twitter"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('twitter') 
                           ? 'bg-blue-400 text-white shadow-lg scale-110' 
@@ -565,6 +580,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('youtube') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="YouTube"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('youtube') 
                           ? 'bg-red-600 text-white shadow-lg scale-110' 
@@ -575,16 +591,30 @@ function AlphaMindLayoutContent({
                       <Youtube className="h-8 w-8" />
                     </Button>
                     <Button 
-                      variant={selectedPlatforms.includes('github') ? 'default' : 'ghost'}
+                      variant={selectedPlatforms.includes('tiktok') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="TikTok"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-                        selectedPlatforms.includes('github') 
-                          ? 'bg-gray-700 text-white shadow-lg scale-110' 
+                        selectedPlatforms.includes('tiktok') 
+                          ? 'bg-gray-900 text-white shadow-lg scale-110' 
                           : 'hover:bg-gray-100 hover:scale-105'
                       }`}
-                      onClick={() => handleAction('github')}
+                      onClick={() => handleAction('tiktok')}
                     >
-                      <Github className="h-8 w-8" />
+                      <Music className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('rednote') ? 'default' : 'ghost'}
+                      size="sm" 
+                      title="Rednote"
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('rednote') 
+                          ? 'bg-red-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('rednote')}
+                    >
+                      <StickyNote className="h-8 w-8" />
                     </Button>
                   </>
                 ) : (
@@ -592,6 +622,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('email') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="Email"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('email') 
                           ? 'bg-blue-600 text-white shadow-lg scale-110' 
@@ -604,6 +635,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('whatsapp') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="WhatsApp"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('whatsapp') 
                           ? 'bg-green-600 text-white shadow-lg scale-110' 
@@ -616,6 +648,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('telegram') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="Telegram"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('telegram') 
                           ? 'bg-sky-500 text-white shadow-lg scale-110' 
@@ -628,6 +661,7 @@ function AlphaMindLayoutContent({
                     <Button 
                       variant={selectedPlatforms.includes('line') ? 'default' : 'ghost'}
                       size="sm" 
+                      title="Line"
                       className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
                         selectedPlatforms.includes('line') 
                           ? 'bg-green-500 text-white shadow-lg scale-110' 
@@ -636,6 +670,19 @@ function AlphaMindLayoutContent({
                       onClick={() => handleAction('line')}
                     >
                       <MessageSquare className="h-8 w-8" />
+                    </Button>
+                    <Button 
+                      variant={selectedPlatforms.includes('crm') ? 'default' : 'ghost'}
+                      size="sm" 
+                      title="CRM"
+                      className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
+                        selectedPlatforms.includes('crm') 
+                          ? 'bg-purple-600 text-white shadow-lg scale-110' 
+                          : 'hover:bg-gray-100 hover:scale-105'
+                      }`}
+                      onClick={() => handleAction('crm')}
+                    >
+                      <Briefcase className="h-8 w-8" />
                     </Button>
                   </>
                 )}
@@ -686,6 +733,20 @@ function AlphaMindLayoutContent({
           comments: "92",
           shares: "56"
         },
+        tiktok: {
+          title: "TikTok Post",
+          content: "🎵 Short and catchy content created with AlphaMind! #TikTok #Shorts #AI",
+          likes: "12.4k",
+          comments: "980",
+          shares: "1.2k"
+        },
+        rednote: {
+          title: "Rednote Post",
+          content: "📝 Lifestyle share crafted via AlphaMind. #Rednote #Lifestyle #Overseas",
+          likes: "5.3k",
+          comments: "420",
+          shares: "310"
+        },
         visualization: {
           title: "YouTube Post",
           content: "📊 This visualization was created with AlphaMind! The AI made data visualization so much easier. #DataViz #AI #Analytics",
@@ -700,7 +761,7 @@ function AlphaMindLayoutContent({
     const content = getSocialMediaContent(effectiveAction);
 
     return (
-      <div className="flex-1 flex items-center justify-center bg-gray-50">
+      <div className="flex-1 flex flex-col items-center justify-center bg-white">
         <div className="relative">
           <div className="w-128 h-192 bg-gray-900 rounded-3xl p-4 shadow-2xl">
             <div className="w-full h-full bg-white rounded-2xl overflow-hidden">
@@ -807,6 +868,12 @@ function AlphaMindLayoutContent({
               </Button>
             </div>
           )}
+        </div>
+        {/* External action buttons below phone (outside display area) */}
+        <div className="mt-3 flex items-center gap-2">
+          <Button size="sm" variant="outline">Edit</Button>
+          <Button size="sm" variant="outline">Post</Button>
+          <Button size="sm" variant="default">Post All</Button>
         </div>
       </div>
     );
@@ -950,6 +1017,12 @@ function AlphaMindLayoutContent({
               <DoorClosed className="h-4 w-4" />
             </Button>
           </div>
+          {/* External action buttons below phone (outside display area) */}
+          <div className="mt-3 flex items-center gap-2 justify-center">
+            <Button size="sm" variant="outline">Edit</Button>
+            <Button size="sm" variant="outline">Post</Button>
+            <Button size="sm" variant="default">Post All</Button>
+          </div>
         </div>
       )}
 
@@ -1022,8 +1095,149 @@ function AlphaMindLayoutContent({
         suggestedLanguage={suggestedLanguage}
       />
 
+      {/* Email Dialog */}
+      {showEmailDialog && (
+        <EmailDialog
+          isOpen={showEmailDialog}
+          onClose={handleCloseEmailDialog}
+          type={emailDialogType}
+        />
+      )}
+
       {/* Fullscreen Phone Display */}
       {renderFullscreenPhone()}
+    </div>
+  );
+}
+
+// Email Dialog Component
+interface EmailDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  type: string;
+}
+
+function EmailDialog({ isOpen, onClose, type }: EmailDialogProps) {
+  if (!isOpen) return null;
+
+  const getDialogContent = () => {
+    const content = {
+      email: {
+        title: "Email",
+        icon: "📧",
+        description: "Send email message",
+        placeholder: "Enter email content...",
+        buttonText: "Send Email"
+      },
+      whatsapp: {
+        title: "WhatsApp",
+        icon: "💬",
+        description: "Send WhatsApp message",
+        placeholder: "Enter WhatsApp message...",
+        buttonText: "Send WhatsApp"
+      },
+      telegram: {
+        title: "Telegram",
+        icon: "📱",
+        description: "Send Telegram message",
+        placeholder: "Enter Telegram message...",
+        buttonText: "Send Telegram"
+      },
+      line: {
+        title: "Line",
+        icon: "💚",
+        description: "Send Line message",
+        placeholder: "Enter Line message...",
+        buttonText: "Send Line"
+      },
+      crm: {
+        title: "CRM",
+        icon: "📊",
+        description: "Manage customer relationship",
+        placeholder: "Enter CRM note...",
+        buttonText: "Save to CRM"
+      }
+    };
+    return content[type as keyof typeof content] || content.email;
+  };
+
+  const dialogContent = getDialogContent();
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-2xl w-[500px] max-h-[600px] flex flex-col overflow-hidden">
+        {/* Header */}
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+          <div className="flex items-center gap-3">
+            <span className="text-2xl">{dialogContent.icon}</span>
+            <Typography variant="h2" className="text-xl font-bold">
+              {dialogContent.title}
+            </Typography>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="h-8 w-8 p-0"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 p-6">
+          <div className="space-y-4">
+            <Typography variant="body" className="text-gray-600">
+              {dialogContent.description}
+            </Typography>
+            
+            {/* Image Preview */}
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-sm font-bold">A</span>
+                </div>
+                <div>
+                  <Typography variant="body" className="font-medium">AlphaMind</Typography>
+                  <Typography variant="body" className="text-sm text-gray-500">AI Assistant</Typography>
+                </div>
+              </div>
+              <div className="bg-white rounded-lg p-3 border">
+                <img 
+                  src="https://picsum.photos/seed/email/300/200" 
+                  alt="Generated content"
+                  className="w-full h-32 object-cover rounded mb-3"
+                />
+                <Typography variant="body" className="text-sm">
+                  ✨ Just created this amazing content with AlphaMind! The AI-powered design is absolutely stunning. #AI #Design #Innovation
+                </Typography>
+              </div>
+            </div>
+
+            {/* Message Input */}
+            <div className="space-y-2">
+              <Typography variant="body" className="text-sm font-medium text-gray-700">
+                Message
+              </Typography>
+              <textarea
+                placeholder={dialogContent.placeholder}
+                className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                rows={4}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button>
+            {dialogContent.buttonText}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }

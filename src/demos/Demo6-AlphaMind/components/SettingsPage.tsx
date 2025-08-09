@@ -137,6 +137,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     </select>
                     <Globe className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   </div>
+                  {/* Language Input */}
+                  <div className="mt-3">
+                    <input
+                      type="text"
+                      placeholder="Custom language (e.g., en-US)"
+                      className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -211,6 +219,16 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                   {t.settings.personalization}
                 </Typography>
                 <div className="space-y-4">
+                  {/* Import File */}
+                  <div className="flex items-center justify-between">
+                    <Typography variant="body" className="font-medium">
+                      Import configuration
+                    </Typography>
+                    <label className="inline-flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
+                      <input type="file" className="hidden" />
+                      <span className="text-sm">Import file</span>
+                    </label>
+                  </div>
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <Typography variant="body" className="font-medium">
