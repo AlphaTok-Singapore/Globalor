@@ -781,11 +781,11 @@ function AlphaMindLayoutContent({
     const content = getSocialMediaContent(selectedAction);
 
     return (
-      <div className="fixed inset-0 bg-black z-50">
+      <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
         <div className={`relative ${
           selectedAction === 'youtube' && youtubeVideoId
             ? 'w-screen h-screen bg-black overflow-hidden'
-            : 'mx-auto my-auto w-[500px] h-[700px] bg-white rounded-2xl shadow-2xl overflow-hidden'
+            : 'w-[640px] h-[900px] bg-white rounded-2xl shadow-2xl overflow-hidden'
         }`}>
           {/* Phone Header */}
           {!(selectedAction === 'youtube' && youtubeVideoId) && (
@@ -908,7 +908,7 @@ function AlphaMindLayoutContent({
 
         {/* Page content - Split layout when action selected */}
         {selectedAction ? (
-          <div className="flex-1 flex">
+          <div className="flex-1 flex py-8">
             {/* Left chat area - 确保不被 sidebar 遮挡 */}
             <div className={`flex-1 flex flex-col ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>
               {renderPageContent()}
@@ -917,7 +917,7 @@ function AlphaMindLayoutContent({
             {renderPhoneDisplay()}
           </div>
         ) : (
-          <div className={`flex-1 ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>
+          <div className={`flex-1 py-8 ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>
             {renderPageContent()}
           </div>
         )}
