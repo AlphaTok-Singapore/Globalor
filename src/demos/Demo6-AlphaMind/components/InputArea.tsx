@@ -7,11 +7,19 @@ import { ActionButtons } from './ActionButtons';
 interface InputAreaProps {
   onSendMessage: (message: string) => void;
   placeholder?: string;
+  mode?: 'public' | 'private';
+  onModeChange?: (mode: 'public' | 'private') => void;
+  onAction?: (actionId: string) => void;
 }
 
-export function InputArea({ onSendMessage, placeholder = "Ask anything..." }: InputAreaProps) {
+export function InputArea({ 
+  onSendMessage, 
+  placeholder = "Ask anything...",
+  mode = 'public',
+  onModeChange = () => {},
+  onAction = () => {}
+}: InputAreaProps) {
   const [inputValue, setInputValue] = useState('');
-  const [mode, setMode] = useState<'public' | 'private'>('public');
 
   const handleSend = () => {
     if (inputValue.trim()) {
@@ -25,6 +33,10 @@ export function InputArea({ onSendMessage, placeholder = "Ask anything..." }: In
       e.preventDefault();
       handleSend();
     }
+  };
+
+  const handleModeChange = (newMode: 'public' | 'private') => {
+    onModeChange(newMode);
   };
 
   return (
@@ -66,21 +78,21 @@ export function InputArea({ onSendMessage, placeholder = "Ask anything..." }: In
         <Button
           variant={mode === 'public' ? 'default' : 'ghost'}
           size="sm"
-          onClick={() => setMode('public')}
+          onClick={() => handleModeChange('public')}
         >
           Public
         </Button>
         <Button
           variant={mode === 'private' ? 'default' : 'ghost'}
           size="sm"
-          onClick={() => setMode('private')}
+          onClick={() => handleModeChange('private')}
         >
           Private
         </Button>
       </div>
 
       {/* Action buttons under input - switch by mode */}
-      <ActionButtons mode={mode} onAction={() => {}} />
+      <ActionButtons mode={mode} onAction={onAction} />
     </div>
   );
 } 

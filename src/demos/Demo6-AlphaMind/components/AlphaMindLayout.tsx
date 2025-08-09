@@ -70,6 +70,7 @@ function AlphaMindLayoutContent({
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
   const [currentPlatformIndex, setCurrentPlatformIndex] = useState<number>(0);
   const [welcomeMode, setWelcomeMode] = useState<'public' | 'private'>('public');
+  const [chatMode, setChatMode] = useState<'public' | 'private'>('public');
   const [isPhoneFullscreen, setIsPhoneFullscreen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState<string>('');
@@ -114,6 +115,30 @@ function AlphaMindLayoutContent({
     setEmailDialogType('');
   };
 
+  const handleWelcomeModeChange = (mode: 'public' | 'private') => {
+    setWelcomeMode(mode);
+    if (mode === 'private') {
+      // Close phone display when switching to private mode
+      setSelectedAction(null);
+      setSelectedPlatforms([]);
+      setCurrentPlatformIndex(0);
+      setYoutubeUrl('');
+      setYoutubeVideoId('');
+    }
+  };
+
+  const handleChatModeChange = (mode: 'public' | 'private') => {
+    setChatMode(mode);
+    if (mode === 'private') {
+      // Close phone display when switching to private mode
+      setSelectedAction(null);
+      setSelectedPlatforms([]);
+      setCurrentPlatformIndex(0);
+      setYoutubeUrl('');
+      setYoutubeVideoId('');
+    }
+  };
+
   const handleOpenSettings = () => {
     setShowSettings(true);
   };
@@ -121,14 +146,14 @@ function AlphaMindLayoutContent({
   const handleAction = (actionId: string) => {
     // Check if this is a private mode action
     const privateActions = ['email', 'whatsapp', 'telegram', 'line', 'crm'];
-    if (welcomeMode === 'private' && privateActions.includes(actionId)) {
+    if ((welcomeMode === 'private' || chatMode === 'private') && privateActions.includes(actionId)) {
       setShowEmailDialog(true);
       setEmailDialogType(actionId);
       return;
     }
 
     setSelectedPlatforms((prev) => {
-      const isPrivateSingleSelect = welcomeMode === 'private';
+      const isPrivateSingleSelect = welcomeMode === 'private' || chatMode === 'private';
       const willSelect = !prev.includes(actionId);
       const next = isPrivateSingleSelect
         ? [actionId]
@@ -471,7 +496,12 @@ function AlphaMindLayoutContent({
             <ChatInterface messages={messages} isSplitLayout={hasAnySelection} />
           </div>
           <div className="flex-shrink-0">
-            <InputArea onSendMessage={onSendMessage} />
+            <InputArea 
+              onSendMessage={onSendMessage} 
+              mode={chatMode}
+              onModeChange={handleChatModeChange}
+              onAction={handleAction}
+            />
           </div>
         </>
       );
@@ -509,14 +539,14 @@ function AlphaMindLayoutContent({
               <Button
                 variant={welcomeMode === 'public' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setWelcomeMode('public')}
+                onClick={() => handleWelcomeModeChange('public')}
               >
                 Public
               </Button>
               <Button
                 variant={welcomeMode === 'private' ? 'default' : 'ghost'}
                 size="sm"
-                onClick={() => setWelcomeMode('private')}
+                onClick={() => handleWelcomeModeChange('private')}
               >
                 Private
               </Button>
