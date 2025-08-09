@@ -17,7 +17,6 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 interface TopHeaderProps {
   user?: User;
-  isSidebarCollapsed?: boolean;
 }
 
 
@@ -41,7 +40,7 @@ const asianCountries = [
   { code: 'IL', name: 'Israel', flag: '🇮🇱', color: 'bg-blue-600' }
 ];
 
-export function TopHeader({ user, isSidebarCollapsed = false }: TopHeaderProps) {
+export function TopHeader({ user }: TopHeaderProps) {
   const { showLanguageDialog } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState(asianCountries[0]);
   const [showCountryDropdown, setShowCountryDropdown] = useState(false);
@@ -83,12 +82,12 @@ export function TopHeader({ user, isSidebarCollapsed = false }: TopHeaderProps) 
   }, [showCountryDropdown, showUserDropdown]);
 
   return (
-    <div className="flex items-center justify-between px-4 py-2 bg-background">
+    <div className="h-full flex items-center justify-between px-4 bg-background">
       {/* 左侧 - Logo 和名称 */}
       <div className="flex items-center gap-3">
-        <div className={`flex items-center gap-2 ${isSidebarCollapsed ? 'ml-8' : ''}`}>
-          <div className="w-4 h-4 bg-gradient-to-br from-blue-400 to-purple-500 rounded flex items-center justify-center">
-            <span className="text-white text-xs font-bold">A</span>
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-purple-500 rounded flex items-center justify-center">
+            <span className="text-white text-[10px] font-bold">A</span>
           </div>
           <Typography variant="body" className="font-semibold text-sm">
             AlphaMind

@@ -15,10 +15,12 @@ interface ActionButtonsProps {
 }
 
 export function ActionButtons({ onAction = () => {} }: ActionButtonsProps) {
-  const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
+  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
 
-  const handlePlatformClick = (platform: string) => {
-    setSelectedPlatform(platform);
+  const togglePlatform = (platform: string) => {
+    setSelectedPlatforms((prev) =>
+      prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform]
+    );
     onAction(platform);
   };
 
@@ -26,74 +28,74 @@ export function ActionButtons({ onAction = () => {} }: ActionButtonsProps) {
     <div className="flex items-center justify-center gap-3 p-8 bg-background">
       <div className="flex items-center gap-6">
         <Button 
-          variant={selectedPlatform === 'linkedin' ? "default" : "ghost"}
+          variant={selectedPlatforms.includes('linkedin') ? "default" : "ghost"}
           size="sm" 
           className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-            selectedPlatform === 'linkedin' 
+            selectedPlatforms.includes('linkedin') 
               ? 'bg-blue-600 text-white shadow-lg scale-110' 
               : 'hover:bg-gray-100 hover:scale-105'
           }`}
-          onClick={() => handlePlatformClick('linkedin')}
+          onClick={() => togglePlatform('linkedin')}
         >
           <Linkedin className="h-8 w-8" />
         </Button>
         <Button 
-          variant={selectedPlatform === 'facebook' ? "default" : "ghost"}
+          variant={selectedPlatforms.includes('facebook') ? "default" : "ghost"}
           size="sm" 
           className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-            selectedPlatform === 'facebook' 
+            selectedPlatforms.includes('facebook') 
               ? 'bg-blue-700 text-white shadow-lg scale-110' 
               : 'hover:bg-gray-100 hover:scale-105'
           }`}
-          onClick={() => handlePlatformClick('facebook')}
+          onClick={() => togglePlatform('facebook')}
         >
           <Facebook className="h-8 w-8" />
         </Button>
         <Button 
-          variant={selectedPlatform === 'instagram' ? "default" : "ghost"}
+          variant={selectedPlatforms.includes('instagram') ? "default" : "ghost"}
           size="sm" 
           className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-            selectedPlatform === 'instagram' 
+            selectedPlatforms.includes('instagram') 
               ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg scale-110' 
               : 'hover:bg-gray-100 hover:scale-105'
           }`}
-          onClick={() => handlePlatformClick('instagram')}
+          onClick={() => togglePlatform('instagram')}
         >
           <Instagram className="h-8 w-8" />
         </Button>
         <Button 
-          variant={selectedPlatform === 'twitter' ? "default" : "ghost"}
+          variant={selectedPlatforms.includes('twitter') ? "default" : "ghost"}
           size="sm" 
           className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-            selectedPlatform === 'twitter' 
+            selectedPlatforms.includes('twitter') 
               ? 'bg-blue-400 text-white shadow-lg scale-110' 
               : 'hover:bg-gray-100 hover:scale-105'
           }`}
-          onClick={() => handlePlatformClick('twitter')}
+          onClick={() => togglePlatform('twitter')}
         >
           <Twitter className="h-8 w-8" />
         </Button>
         <Button 
-          variant={selectedPlatform === 'youtube' ? "default" : "ghost"}
+          variant={selectedPlatforms.includes('youtube') ? "default" : "ghost"}
           size="sm" 
           className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-            selectedPlatform === 'youtube' 
+            selectedPlatforms.includes('youtube') 
               ? 'bg-red-600 text-white shadow-lg scale-110' 
               : 'hover:bg-gray-100 hover:scale-105'
           }`}
-          onClick={() => handlePlatformClick('youtube')}
+          onClick={() => togglePlatform('youtube')}
         >
           <Youtube className="h-8 w-8" />
         </Button>
         <Button 
-          variant={selectedPlatform === 'github' ? "default" : "ghost"}
+          variant={selectedPlatforms.includes('github') ? "default" : "ghost"}
           size="sm" 
           className={`h-16 w-16 p-0 rounded-full transition-all duration-200 ${
-            selectedPlatform === 'github' 
+            selectedPlatforms.includes('github') 
               ? 'bg-gray-800 text-white shadow-lg scale-110' 
               : 'hover:bg-gray-100 hover:scale-105'
           }`}
-          onClick={() => handlePlatformClick('github')}
+          onClick={() => togglePlatform('github')}
         >
           <Github className="h-8 w-8" />
         </Button>
