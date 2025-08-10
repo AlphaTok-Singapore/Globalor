@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/base/button';
+import { Dropdown, DropdownContainer, DropdownTrigger, DropdownContent, DropdownItem } from '@/components/ui/base/dropdown';
 import { Typography } from '@/components/ui/base/typography';
 import { 
   DoorOpen, 
   DoorClosed, 
   ChevronUp,
+  ChevronDown,
   Maximize2,
   X,
   Linkedin,
@@ -20,7 +22,8 @@ import {
   MessageSquare,
   Briefcase,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  User as UserIcon
 } from 'lucide-react';
 import { LanguageProvider, useLanguage } from '../contexts/LanguageContext';
 import { LanguageDialog } from './LanguageDialog';
@@ -77,6 +80,90 @@ function AlphaMindLayoutContent({
   const [youtubeVideoId, setYoutubeVideoId] = useState<string>('');
   const [showEmailDialog, setShowEmailDialog] = useState(false);
   const [emailDialogType, setEmailDialogType] = useState<string>('');
+  // Email panel states
+  type EmailCategory = 'Inbox' | 'Starred' | 'Snoozed' | 'Important' | 'Sent' | 'Drafts' | 'Chats' | 'Scheduled' | 'All Mail' | 'Spam' | 'Trash';
+  const [emailCategory, setEmailCategory] = useState<EmailCategory>('Inbox');
+  const [selectedEmail, setSelectedEmail] = useState<{
+    id: string;
+    subject: string;
+    contact: string;
+    time: string;
+    count: number;
+  } | null>(null);
+  const [selectedEmailThread, setSelectedEmailThread] = useState<Array<{
+    id: string;
+    sender: string;
+    content: string;
+    time: string;
+    subject?: string;
+    body?: string;
+  }>>([]);
+  // CRM selection states
+  const [selectedCrmTopic, setSelectedCrmTopic] = useState<string | null>(null);
+  const [selectedCrmDetails, setSelectedCrmDetails] = useState<string[]>([]);
+  const [showContacts, setShowContacts] = useState(false);
+  const contactsList: Array<{ name: string; email: string; company: string }> = [
+    { name: 'Alice Tan', email: 'alice.tan@example.com', company: 'Globalor Pte Ltd' },
+    { name: 'Bob Lee', email: 'bob.lee@example.com', company: 'AlphaTok Singapore' },
+    { name: 'Carol Wong', email: 'carol.wong@example.com', company: 'Sea Ventures' },
+    { name: 'David Chan', email: 'david.chan@example.com', company: 'Nexus Labs' },
+  ];
+  const emailData: Record<'inbox' | 'sent' | 'trash' | 'drafts', Array<{
+    id: string;
+    subject: string;
+    preview: string;
+    contact: string;
+    time: string;
+    unread?: boolean;
+    count?: number;
+  }>> = {
+    inbox: [
+      { id: 'm1', subject: 'Welcome to AlphaMind', preview: 'Thanks for signing up. Here are some tips to get started...', contact: 'Alice', time: '09:24', unread: true, count: 3 },
+      { id: 'm2', subject: 'Weekly Report', preview: 'Your weekly performance summary is ready to view.', contact: 'Bob', time: 'Yesterday', count: 6 },
+      { id: 'm3', subject: 'Meeting Notes', preview: 'Here are the notes from our meeting yesterday...', contact: 'Carol', time: 'Tue', count: 2 },
+    ],
+    sent: [
+      { id: 's1', subject: 'Re: Partnership Proposal', preview: 'Thanks for the proposal. Let’s schedule a call...', contact: 'Dave', time: '08:10', count: 4 },
+      { id: 's2', subject: 'Invoice for July', preview: 'Please find attached the invoice for July.', contact: 'Alice', time: 'Mon', count: 1 },
+    ],
+    drafts: [
+      { id: 'd1', subject: 'Draft: New Campaign Plan', preview: 'Outline: goals, budget, timeline...', contact: 'Carol', time: '10:02', count: 1 },
+    ],
+    trash: [
+      { id: 't1', subject: 'Promotion', preview: 'Limited time offer just for you!', contact: 'Bob', time: '2 days ago', count: 2 },
+    ],
+  };
+
+  const mapCategoryToDataset = (cat: EmailCategory): 'inbox' | 'sent' | 'trash' | 'drafts' => {
+    switch (cat) {
+      case 'Sent':
+        return 'sent';
+      case 'Drafts':
+        return 'drafts';
+      case 'Spam':
+      case 'Trash':
+        return 'trash';
+      default:
+        return 'inbox';
+    }
+  };
+  
+  const buildThreadForEmail = (m: { id: string; subject: string; contact: string; time: string; count?: number; preview: string }) => {
+    const total = Math.max(1, m.count ?? 1);
+    const thread: Array<{ id: string; sender: string; content: string; time: string; subject?: string; body?: string }> = [];
+    for (let i = 0; i < total; i++) {
+      const isLast = i === total - 1;
+      thread.push({
+        id: `${m.id}-${i + 1}`,
+        sender: i % 2 === 0 ? m.contact : 'Me',
+        content: isLast ? `Latest: ${m.subject}` : `Re: ${m.subject} (#${i + 1})`,
+        time: isLast ? m.time : `-${total - i}d`,
+        subject: isLast ? m.subject : undefined,
+        body: isLast ? `${m.preview}\n\nRegards,\n${i % 2 === 0 ? m.contact : 'Me'}` : undefined,
+      });
+    }
+    return thread;
+  };
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -147,6 +234,21 @@ function AlphaMindLayoutContent({
     // Check if this is a private mode action
     const privateActions = ['email', 'whatsapp', 'telegram', 'line', 'crm'];
     if ((welcomeMode === 'private' || chatMode === 'private') && privateActions.includes(actionId)) {
+      // For email, show right-side email panel instead of dialog per requirement
+      if (actionId === 'email') {
+        setSelectedAction('email');
+        setSelectedPlatforms(['email']);
+        setIsPhoneFullscreen(false);
+        setShowEmailDialog(false);
+        return;
+      }
+      if (actionId === 'crm') {
+        setSelectedAction('crm');
+        setSelectedPlatforms(['crm']);
+        setIsPhoneFullscreen(false);
+        setShowEmailDialog(false);
+        return;
+      }
       setShowEmailDialog(true);
       setEmailDialogType(actionId);
       return;
@@ -489,6 +591,83 @@ function AlphaMindLayoutContent({
     if (currentPage === 'knowledge-base') return <KnowledgeBasePage />;
     if (currentPage === 'materials') return <MaterialsPage />;
 
+    // 当选择了邮件或 CRM 条目时，左侧展示对应信息
+    if (selectedAction === 'email' && selectedEmail && selectedEmailThread.length > 0) {
+      return (
+        <>
+          <div className="flex-1 min-h-0 p-4">
+            <div className="max-w-3xl space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-semibold truncate">{selectedEmail.contact} · {selectedEmail.subject}</div>
+                <div className="text-xs text-muted-foreground">{selectedEmail.time}</div>
+              </div>
+              {/* 聊天顺序图（简化为时间顺序列表）*/}
+              <div className="space-y-2">
+                {selectedEmailThread.map((item, idx) => (
+                  <div key={item.id} className="flex gap-3">
+                    <div className={`w-2 h-2 rounded-full mt-2 ${idx === selectedEmailThread.length - 1 ? 'bg-blue-600' : 'bg-gray-400'}`} />
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium truncate">{item.sender}</span>
+                        <span className="text-xs text-muted-foreground whitespace-nowrap">{item.time}</span>
+                      </div>
+                      {idx === selectedEmailThread.length - 1 ? (
+                        <div className="mt-1 bg-white border border-gray-200 rounded-md p-3 space-y-2">
+                          <div className="text-sm font-semibold truncate">{item.subject}</div>
+                          <div className="text-sm whitespace-pre-line break-words">{item.body}</div>
+                        </div>
+                      ) : (
+                        <div className="text-sm text-foreground truncate">{item.content}</div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex-shrink-0">
+            <InputArea 
+              onSendMessage={onSendMessage} 
+              mode={chatMode}
+              onModeChange={handleChatModeChange}
+              onAction={handleAction}
+            />
+          </div>
+        </>
+      );
+    }
+
+    if (selectedAction === 'crm' && selectedCrmTopic) {
+      return (
+        <>
+          <div className="flex-1 min-h-0 p-4">
+            <div className="max-w-3xl space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="text-lg font-semibold truncate">{selectedCrmTopic}</div>
+                <div className="text-xs text-muted-foreground">概览</div>
+              </div>
+              <div className="space-y-2">
+                {selectedCrmDetails.map((line, i) => (
+                  <div key={i} className="flex gap-3">
+                    <div className={`w-2 h-2 rounded-full mt-2 ${i === selectedCrmDetails.length - 1 ? 'bg-purple-600' : 'bg-gray-400'}`} />
+                    <div className="flex-1 min-w-0 text-sm text-foreground">{line}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="flex-shrink-0">
+            <InputArea 
+              onSendMessage={onSendMessage} 
+              mode={chatMode}
+              onModeChange={handleChatModeChange}
+              onAction={handleAction}
+            />
+          </div>
+        </>
+      );
+    }
+
     if (messages.length > 0) {
       return (
         <>
@@ -733,62 +912,7 @@ function AlphaMindLayoutContent({
   const renderPhoneDisplay = () => {
     if (!effectiveAction) return null;
 
-    const getSocialMediaContent = (actionId: string) => {
-      const content = {
-        image: {
-          title: "Instagram Post",
-          content: "✨ Just created this amazing image with AlphaMind! The AI-powered design is absolutely stunning. #AI #Design #Innovation",
-          likes: "2.4k",
-          comments: "156",
-          shares: "89"
-        },
-        slides: {
-          title: "LinkedIn Post",
-          content: "📊 Excited to share this presentation created with AlphaMind! The AI helped me structure this perfectly. #Professional #AI #Presentation",
-          likes: "1.2k",
-          comments: "78",
-          shares: "45"
-        },
-        webpage: {
-          title: "Twitter Post",
-          content: "🌐 Check out this webpage I created with AlphaMind! The AI made web development so much easier. #WebDev #AI #Innovation",
-          likes: "3.1k",
-          comments: "234",
-          shares: "167"
-        },
-        spreadsheet: {
-          title: "Facebook Post",
-          content: "📈 Amazing spreadsheet created with AlphaMind! The AI helped me organize this data perfectly. #Data #AI #Productivity",
-          likes: "1.8k",
-          comments: "92",
-          shares: "56"
-        },
-        tiktok: {
-          title: "TikTok Post",
-          content: "🎵 Short and catchy content created with AlphaMind! #TikTok #Shorts #AI",
-          likes: "12.4k",
-          comments: "980",
-          shares: "1.2k"
-        },
-        rednote: {
-          title: "Rednote Post",
-          content: "📝 Lifestyle share crafted via AlphaMind. #Rednote #Lifestyle #Overseas",
-          likes: "5.3k",
-          comments: "420",
-          shares: "310"
-        },
-        visualization: {
-          title: "YouTube Post",
-          content: "📊 This visualization was created with AlphaMind! The AI made data visualization so much easier. #DataViz #AI #Analytics",
-          likes: "4.2k",
-          comments: "312",
-          shares: "198"
-        }
-      };
-      return content[actionId as keyof typeof content] || content.image;
-    };
-
-    const content = getSocialMediaContent(effectiveAction);
+    // previously had social content map; not required since we renderPlatformHome
 
     return (
       <div className="flex-1 flex flex-col items-center justify-center bg-white">
@@ -913,48 +1037,7 @@ function AlphaMindLayoutContent({
   const renderFullscreenPhone = () => {
     if (!isPhoneFullscreen || !selectedAction) return null;
 
-    const getSocialMediaContent = (actionId: string) => {
-      const content = {
-        image: {
-          title: "Instagram Post",
-          content: "✨ Just created this amazing image with AlphaMind! The AI-powered design is absolutely stunning. #AI #Design #Innovation",
-          likes: "2.4k",
-          comments: "156",
-          shares: "89"
-        },
-        slides: {
-          title: "LinkedIn Post",
-          content: "📊 Excited to share this presentation created with AlphaMind! The AI helped me structure this perfectly. #Professional #AI #Presentation",
-          likes: "1.2k",
-          comments: "78",
-          shares: "45"
-        },
-        webpage: {
-          title: "Twitter Post",
-          content: "🌐 Check out this webpage I created with AlphaMind! The AI made web development so much easier. #WebDev #AI #Innovation",
-          likes: "3.1k",
-          comments: "234",
-          shares: "167"
-        },
-        spreadsheet: {
-          title: "Facebook Post",
-          content: "📈 Amazing spreadsheet created with AlphaMind! The AI helped me organize this data perfectly. #Data #AI #Productivity",
-          likes: "1.8k",
-          comments: "92",
-          shares: "56"
-        },
-        visualization: {
-          title: "YouTube Post",
-          content: "📊 This visualization was created with AlphaMind! The AI made data visualization so much easier. #DataViz #AI #Analytics",
-          likes: "4.2k",
-          comments: "312",
-          shares: "198"
-        }
-      };
-      return content[selectedAction as keyof typeof content] || content.image;
-    };
-
-    const content = getSocialMediaContent(selectedAction);
+    // previously had social content map; not required in fullscreen mode
 
     return (
       <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
@@ -1014,6 +1097,87 @@ function AlphaMindLayoutContent({
             <X className="h-4 w-4" />
           </Button>
         </div>
+      </div>
+    );
+  };
+
+  // Right-side Email panel when email action selected
+  const renderEmailPanel = () => {
+    const datasetKey = mapCategoryToDataset(emailCategory);
+    const items = emailData[datasetKey];
+    return (
+      <div className="w-[420px] border-l border-border px-4">
+        {/* Top options bar with folders and contacts */}
+        <div className="sticky top-0 bg-background z-10 py-3 border-b border-border">
+          <div className="flex items-center justify-between gap-3">
+            {/* Folder/category dropdown */}
+            <Dropdown>
+              <DropdownContainer>
+                <DropdownTrigger width="auto" placeholder="选择分类" suffix={<ChevronDown className="h-4 w-4 text-muted-foreground" />}>
+                  {emailCategory}
+                </DropdownTrigger>
+                <DropdownContent size="lg">
+                  {([
+                    'Inbox','Starred','Snoozed','Important','Sent','Drafts','Chats','Scheduled','All Mail','Spam','Trash'
+                  ] as EmailCategory[]).map((cat) => (
+                    <DropdownItem key={cat} onClick={() => setEmailCategory(cat)}>
+                      {cat}
+                    </DropdownItem>
+                  ))}
+                </DropdownContent>
+              </DropdownContainer>
+            </Dropdown>
+            {/* Contacts toggle button */}
+            <Button size="sm" variant={showContacts ? 'default' : 'outline'} onClick={() => setShowContacts(!showContacts)}>
+              Contacts
+            </Button>
+          </div>
+        </div>
+
+        {/* Content: contacts or emails */}
+        {showContacts ? (
+          <div className="py-3 space-y-2 overflow-y-auto">
+            {contactsList.map((c) => (
+              <div key={c.email} className="p-3 rounded-md border border-border hover:bg-muted cursor-pointer">
+                <div className="flex items-center gap-2 min-w-0 mb-1">
+                  <UserIcon className="h-4 w-4 text-muted-foreground" />
+                  <span className="font-medium truncate">{c.name}</span>
+                </div>
+                <div className="text-sm text-muted-foreground truncate">{c.email}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{c.company}</div>
+              </div>
+            ))}
+            {contactsList.length === 0 && (
+              <div className="text-sm text-muted-foreground py-8 text-center">暂无联系人</div>
+            )}
+          </div>
+        ) : (
+          <div className="py-3 space-y-2 overflow-y-auto">
+            {items.map((m) => (
+              <div
+                key={m.id}
+                onClick={() => {
+                  setSelectedEmail({ id: m.id, subject: m.subject, contact: m.contact, time: m.time, count: m.count ?? 1 });
+                  setSelectedPlatforms([]);
+                  setSelectedAction('email');
+                  setSelectedEmailThread(buildThreadForEmail(m));
+                }}
+                className={`p-2 rounded-md border border-border hover:bg-muted cursor-pointer ${m.unread ? 'bg-muted/40' : ''}`}
+              >
+                {/* 单行：名字 + 标题 + (对话数) + 最后时间；缩小间距 */}
+                <div className="flex items-center gap-1 min-w-0">
+                  <span className="font-medium truncate max-w-[28%]">{m.contact}</span>
+                  <span className="text-sm truncate flex-1">{m.subject}</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">({m.count ?? 1})</span>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap ml-1">{m.time}</span>
+                </div>
+              </div>
+            ))}
+            {items.length === 0 && (
+              <div className="text-sm text-muted-foreground py-8 text-center">暂无邮件</div>
+            )}
+          </div>
+        )}
       </div>
     );
   };
@@ -1095,8 +1259,43 @@ function AlphaMindLayoutContent({
             <div className={`flex-1 flex flex-col ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>
               {renderPageContent()}
             </div>
-            {/* Right phone display area */}
-            {renderPhoneDisplay()}
+            {/* Right panel: email panel or CRM panel; fallback to phone display */}
+            {selectedAction === 'email' ? renderEmailPanel() : selectedAction === 'crm' ? (
+              <div className="w-[420px] border-l border-border px-4 py-4 overflow-y-auto">
+                <div className="space-y-4">
+                  <div>
+                    <div className="text-lg font-semibold mb-2">客户信息管理</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('客户信息管理'); setSelectedCrmDetails(['姓名/电话/邮箱/地址/公司/职位','客户分类与标签','交互历史：通话/邮件/会议']); }}>查看</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold mb-2">销售管理</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('销售管理'); setSelectedCrmDetails(['线索（Leads）来源/转化','商机（Opportunities）阶段与预计收入','销售管道（Pipeline）可视化']); }}>查看</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold mb-2">联系人管理</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('联系人管理'); setSelectedCrmDetails(['多联系人角色/偏好','联系人与公司/商机关联']); }}>查看</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold mb-2">任务和活动管理</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('任务和活动管理'); setSelectedCrmDetails(['跟进电话/邮件/会议','日程提醒']); }}>查看</Button>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-semibold mb-2">报表与分析</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('报表与分析'); setSelectedCrmDetails(['销售业绩/转化率/收入预测','客户行为分析（高价值/流失）','图表与仪表盘']); }}>查看</Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : renderPhoneDisplay()}
           </div>
         ) : (
           <div className={`flex-1 py-8 ${(!isTaskListCollapsed || isHovering) ? 'ml-80' : ''}`}>

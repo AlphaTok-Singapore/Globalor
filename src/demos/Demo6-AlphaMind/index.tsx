@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { AlphaMindLayout } from './components/AlphaMindLayout';
 import { ChatMessage, User } from './types';
 

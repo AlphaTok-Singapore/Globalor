@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/base/button';
 import { Typography } from '@/components/ui/base/typography';
 import {
   Bell,
-  Smartphone,
+  // Smartphone,
   Star,
   ChevronDown,
-  Globe,
+  // Globe,
   User as UserIcon,
   Settings,
   LogOut,

@@ -1,7 +1,5 @@
 import { ChatMessage } from '../types';
 import { Typography } from '@/components/ui/base/typography';
-import { Avatar } from '@/components/ui/base/avatar';
-import { BlockLayout } from '@/components/ui/layout/block-layout';
 import { useEffect, useRef } from 'react';
 
 interface ChatInterfaceProps {

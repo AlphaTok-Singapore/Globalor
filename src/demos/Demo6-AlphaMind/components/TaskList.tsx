@@ -6,7 +6,7 @@ import {
   MessageSquare, 
   Bot, 
   Star,
-  Clock,
+  // Clock,
   Database,
   Workflow,
   BarChart3,
@@ -85,14 +85,7 @@ interface NavigationItem {
   children?: NavigationItem[];
 }
 
-interface NavigationItemProps {
-  item: NavigationItem;
-  isCollapsed: boolean;
-  currentPage: string;
-  expandedItems: string[];
-  onNavigate: (page: string) => void;
-  onToggleExpanded: (id: string) => void;
-}
+// removed NavigationItemProps (no longer used)
 
 const getIconComponent = (iconName: string) => {
   const iconMap: { [key: string]: any } = {
@@ -111,26 +104,24 @@ const getIconComponent = (iconName: string) => {
   return iconMap[iconName] || MessageSquare;
 };
 
-export function TaskList({ isCollapsed = false, onSelectTask, currentPage = 'chat', onNavigate }: TaskListProps) {
+export function TaskList({ isCollapsed: _isCollapsed = false, onSelectTask, currentPage: _currentPage = 'chat', onNavigate }: TaskListProps) {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'all' | 'favorites' | 'scheduled'>('all');
   const [selectedTask, setSelectedTask] = useState<string>('1');
-  const [expandedItems, setExpandedItems] = useState<string[]>(['data']);
+  // const [expandedItems, setExpandedItems] = useState<string[]>(['data']);
 
   const handleTaskSelect = (taskId: string) => {
     setSelectedTask(taskId);
     onSelectTask?.(taskId);
   };
 
-  const toggleExpanded = (id: string) => {
-    setExpandedItems(prev => 
-      prev.includes(id) 
-        ? prev.filter(item => item !== id)
-        : [...prev, id]
-    );
-  };
+  // no tree view at the moment; keep state for future but avoid unused warnings
+  // remove unused handler for now
+  // const toggleExpanded = (_id: string) => {
+  //   setExpandedItems(prev => prev);
+  // };
 
-  const isExpanded = (id: string) => expandedItems.includes(id);
+  // const isExpanded = (id: string) => expandedItems.includes(id);
 
   const filteredTasks = mockTasks.filter(task => {
     if (activeTab === 'favorites') return task.isFavorite;
@@ -190,58 +181,7 @@ export function TaskList({ isCollapsed = false, onSelectTask, currentPage = 'cha
     }
   ];
 
-  const renderNavigationItem = ({ item, isCollapsed, currentPage, expandedItems, onNavigate, onToggleExpanded }: NavigationItemProps) => {
-    const IconComponent = getIconComponent(item.icon);
-    const isActive = currentPage === item.page;
-    const hasChildren = item.children && item.children.length > 0;
-    const isItemExpanded = isExpanded(item.id);
-
-    return (
-      <div key={item.id}>
-        <div
-          onClick={() => {
-            if (hasChildren) {
-              onToggleExpanded(item.id);
-            } else if (item.page) {
-              onNavigate(item.page);
-            }
-          }}
-          className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors ${
-            isActive ? 'bg-sidebar-selected text-sidebar-selected-foreground' : 'hover:bg-sidebar-accent'
-          }`}
-        >
-          <IconComponent className="h-4 w-4 flex-shrink-0" />
-          <span className="flex-1 text-sm font-medium">{item.label}</span>
-          {hasChildren && (
-            isItemExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />
-          )}
-        </div>
-
-        {/* 子菜单 */}
-        {hasChildren && isItemExpanded && (
-          <div className="ml-6 mt-1 space-y-1">
-            {item.children!.map(child => {
-              const ChildIconComponent = getIconComponent(child.icon);
-              const isChildActive = currentPage === child.page;
-
-              return (
-                <div
-                  key={child.id}
-                  onClick={() => child.page && onNavigate(child.page)}
-                  className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors ${
-                    isChildActive ? 'bg-sidebar-selected text-sidebar-selected-foreground' : 'hover:bg-sidebar-accent'
-                  }`}
-                >
-                  <ChildIconComponent className="h-4 w-4 flex-shrink-0" />
-                  <span className="text-sm">{child.label}</span>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-    );
-  };
+  // removed renderNavigationItem (not used in current layout)
 
   return (
     <div className="flex flex-col h-full bg-sidebar border-r border-sidebar-border min-w-0">
@@ -363,7 +303,6 @@ export function TaskList({ isCollapsed = false, onSelectTask, currentPage = 'cha
         <div className="flex justify-between items-center">
           {navigationItems.map(item => {
             const IconComponent = getIconComponent(item.icon);
-            const isActive = currentPage === item.page;
             
             return (
               <Button 
@@ -371,7 +310,7 @@ export function TaskList({ isCollapsed = false, onSelectTask, currentPage = 'cha
                 variant="ghost" 
                 size="sm" 
                 className="flex-1"
-                onClick={() => item.page && onNavigate(item.page)}
+                onClick={() => item.page && onNavigate!(item.page)}
                 title={item.label}
               >
                 <IconComponent className="h-4 w-4" />

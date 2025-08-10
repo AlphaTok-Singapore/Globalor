@@ -9,9 +9,9 @@ import {
   Edit, 
   Trash2, 
   FileText,
-  Image,
+  // Image,
   Video,
-  Music,
+  // Music,
   File,
   Download,
   Eye

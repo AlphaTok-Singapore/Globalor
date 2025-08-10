@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { ChatMessage } from '../types';
-import React from 'react'; // Added missing import for React
+// React import not required in React 17+ with jsx transform; remove unused
 
 interface SidebarProps {
   isCollapsed?: boolean;
@@ -41,21 +41,14 @@ interface SidebarProps {
   currentTaskId?: string | null;
 }
 
-interface TaskItem {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: Date;
-  isFavorite: boolean;
-  type: 'chat' | 'image' | 'slides' | 'webpage' | 'spreadsheet' | 'visualization';
-}
+// Removed unused TaskItem interface
 
 export function Sidebar({ 
   isCollapsed = false, 
   onSelectTask = () => {}, 
   currentPage = 'chat',
   onNavigate = () => {},
-  messages = [],
+  messages: _messages = [],
   onToggleCollapse = () => {},
   onNewTask = () => {},
   onOpenSettings = () => {},
@@ -64,7 +57,7 @@ export function Sidebar({
 }: SidebarProps) {
   const { t } = useLanguage();
   const [showTaskOptions, setShowTaskOptions] = useState<string | null>(null);
-  const [searchValue, setSearchValue] = useState('');
+  // const [searchValue, setSearchValue] = useState('');
 
   // 处理新建任务
   const handleNewTask = () => {
@@ -98,17 +91,7 @@ export function Sidebar({
     return date.toLocaleDateString();
   };
 
-  const getTaskIcon = (type: string) => {
-    const icons = {
-      chat: MessageSquare,
-      image: '🖼️',
-      slides: '📊',
-      webpage: '🌐',
-      spreadsheet: '📈',
-      visualization: '📊'
-    };
-    return icons[type as keyof typeof icons] || MessageSquare;
-  };
+  // removed unused getTaskIcon
 
   if (isCollapsed) {
     return (

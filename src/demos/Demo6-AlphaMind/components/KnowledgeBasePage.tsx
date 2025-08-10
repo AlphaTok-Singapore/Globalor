@@ -9,8 +9,8 @@ import {
   Edit, 
   Trash2, 
   BookOpen,
-  FileText,
-  Database,
+  // FileText,
+  // Database,
   Tag
 } from 'lucide-react';
 

@@ -16,9 +16,9 @@ import {
   Moon,
   Sun,
   Monitor,
-  Mail,
-  Bell,
-  Shield
+  // Mail,
+  // Bell,
+  // Shield
 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 

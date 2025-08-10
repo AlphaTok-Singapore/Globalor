@@ -1,0 +1,391 @@
+[33mcommit cba384dfdc3195fe212836fd8ad543cb220b4bc1[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31mglobalor/main[m[33m, [m[1;31mglobalor/HEAD[m[33m)[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Sat Aug 9 20:53:20 2025 +0800
+
+    Close phone display when switching to private mode - Added handleWelcomeModeChange and handleChatModeChange functions - Modified InputArea to receive mode as prop and notify parent on changes - Updated handleAction to check both welcomeMode and chatMode for private actions - Phone display now closes automatically when switching to private mode in both welcome and chat pages
+
+[33mcommit 9b546ca7c3479c55460cf947f7aa283634d94d10[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Sat Aug 9 20:50:06 2025 +0800
+
+    Add email dialog for private mode actions - Private mode icons now show email dialog instead of phone display - Email dialog includes image preview and message input - Support for Email, WhatsApp, Telegram, Line, and CRM dialogs - Clean up unused imports
+
+[33mcommit 9ae38ff0b1780bb812525e326f494c456a95bd42[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Sat Aug 9 17:36:29 2025 +0800
+
+    feat(alphaMind): add Public/Private toggle on welcome and chat; Private single-select with Email/WhatsApp/Telegram/Line; fix imports and rendering on welcome page
+
+[33mcommit ce104aec9e90f9b8a40dd85344f05af55952ac64[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Sat Aug 9 15:16:06 2025 +0800
+
+    chore(alphaMind): center main content vertically; enlarge and center fullscreen phone; improve header/sidebar spacing (English comments)
+
+[33mcommit b74cf0820411fd3fa9cf88569c7a39825827190d[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Sat Aug 9 09:58:04 2025 +0800
+
+    feat(alphaMind): social multi-select with per-platform carousel nav; more realistic social feeds; fix header/logo and sidebar shift; YouTube full-screen landscape; stable TopHeader size
+
+[33mcommit eeae46cb6bee91575d6c175250792b63b3f96087[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Fri Aug 8 14:46:29 2025 +0800
+
+    优化AlphaMind界面：修复社交媒体图标选中状态，调整顶部框架尺寸，设置默认路由为AlphaMind
+
+[33mcommit 56218b78aaf8ead813287c2b538122596f9557c4[m
+Author: alexleihui <alexleihui@gmail.com>
+Date:   Wed Aug 6 23:52:36 2025 +0800
+
+    feat: 完善AlphaMind界面功能
+    
+    - 修复侧边栏顶部横线，让界面更一体化
+    - 在英文模式下所有内容显示为英文
+    - 语言设置移至设置对话框，从顶部导航栏移除
+    - 增加输入框高度，添加agent和语音图标
+    - 修复发送按钮方向为朝右
+    - 在右上角添加计分按钮显示剩余分数
+    - 将社交媒体图标更大化，支持选中状态
+    - 在默认页面也显示社交媒体图标
+    - 支持12种语言的完整翻译
+
+[33mcommit 925a8cb268cd7f4887381ff8cdc26bf8939660ba[m
+Author: alexleihui <42716042+alexleihui@users.noreply.github.com>
+Date:   Wed Aug 6 18:32:24 2025 +0800
+
+    docs: 更新 README 文件，添加 AlphaMind 项目详细说明
+
+[33mcommit bc1820dd057413f0f3e81f2cbc26169ebc027a48[m
+Author: alexleihui <42716042+alexleihui@users.noreply.github.com>
+Date:   Wed Aug 6 18:31:12 2025 +0800
+
+    feat: 添加 AlphaMind AI 助手完整功能 - 手机显示全屏和关闭按钮 - 侧边栏任务管理（创建时间、选项按钮） - 多语言支持（英文、中文、马来语、泰语、印尼语） - 智能语言切换和地域选择 - 完整的 UI 组件和交互功能
+
+[33mcommit 3c1bed4ee847e16930757041b6ede16c9aa73170[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Fri Jul 11 12:00:45 2025 +0800
+
+    docs: update README with bilingual support and latest project info
+
+[33mcommit f905781b3241ffa6211dc4d7b127b3ef2dff1b88[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Fri Jul 11 11:48:14 2025 +0800
+
+    update: 更新项目 logo 文件
+
+[33mcommit 5f68760ea8aebf78df3c76351846b05907d4a684[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 8 12:47:31 2025 +0800
+
+    fix: 修复 Demo3-Resume 页面的双滚动条问题，统一与 Demo2 的滚动行为
+
+[33mcommit 3398c410102708d8db9963f8498c0d84cbb30efa[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 8 12:19:31 2025 +0800
+
+    refactor: 将 Demo1 从用户管理页面重构为数据分析仪表盘
+
+[33mcommit dcedf759ad772473f43f88b196d4e543415582a3[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 8 12:07:05 2025 +0800
+
+    refactor: 优化CSS结构和移除未使用代码
+    
+    - 重构动画相关CSS类,使用 @layer utilities 包装
+    - 简化Tailwind工具类,改用CSS变量
+    - 移除Demo1中未使用的periodMap对象
+    - 清理未使用的网格系统样式
+
+[33mcommit 630f7ec4dcd97a0ce77115dc4d814a94f2818ccb[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 8 11:38:09 2025 +0800
+
+    refactor: 统一字重系统，限制为 normal(400) 和 medium(500) 两种字重
+
+[33mcommit afd427b24432cfbec5b859c2c5643b6ded8536b2[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Mon Jul 7 22:24:34 2025 +0800
+
+    修复组件导出索引文件中的无效内容
+    
+    - 补充 Command 组件的完整导出（CommandDialog, CommandInput, CommandList 等）
+    - 补充 Cascader 组件样式变体导出（cascaderContainerVariants 等）
+    - 补充 Sidebar 相关 TypeScript 接口类型导出
+    - 补充 ButtonGroup 样式变体导出
+    - 补充 Button、TopNav、Logo 的类型定义导出
+    - 移除未使用的 Badge 导入
+    
+    确保组件库导出的完整性和一致性，提供完整的组件功能、样式定制和类型支持
+
+[33mcommit c67379d55d8299687a54b5489a880eb02629a301[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Mon Jul 7 16:59:57 2025 +0800
+
+    feat: update UI components - button-group, color-palette, dropdown, and logo components
+
+[33mcommit 7e335e0d1254db5ff03f24b61e5910c9b8f046d9[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 1 19:24:17 2025 +0800
+
+    feat: 优化组件库功能和演示页面 - 更新表格、布局、分页等组件 - 完善电影排行榜和票务预订演示 - 优化故事文件配置
+
+[33mcommit 4216d3a0cfc55e79b19f6485616283ad6d1cab00[m
+Merge: 17152d9 7146b07
+Author: Roy.idoodle <idoodle@aliyun.com>
+Date:   Tue Jul 1 17:00:47 2025 +0800
+
+    Merge pull request #1 from huluwa1991/hotfix/fix-table-style
+    
+    feat(table): 新增页面级粘性表头功能并优化表格组件
+
+[33mcommit 7146b0701ae1af86cc5f31f63e8a7a5d70cb4b48[m[33m ([m[1;31morigin/hotfix/fix-table-style[m[33m)[m
+Author: wangchong <idoodle@aliyun.com>
+Date:   Tue Jul 1 16:57:29 2025 +0800
+
+    feat(table): 新增页面级粘性表头功能并优化表格组件
+    
+    - 在 TableWrapper 组件中添加 pageStickyHeader 属性，用于实现页面级粘性表头
+    - 重构 TableWrapper 组件，支持滚动和非滚动模式- 更新 TableHead 组件，根据上下文自动启用粘性效果- 在故事文件中添加页面级粘性表头的示例- 优化表格组件的样式和结构
+
+[33mcommit 17152d952c99827f3034987fe688f7838f632557[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 1 13:37:16 2025 +0800
+
+    fix(Demo3-Resume): 修复删除按钮Popconfirm确认对话框不显示的问题
+    
+    - 修复DeleteButton组件中Popconfirm受控状态导致对话框无法显示的bug
+    - 改进hasItemContent函数的空对象和布尔值字段判断逻辑
+    - 移除不必要的popconfirmOpen状态管理，让Popconfirm自管理状态
+
+[33mcommit 7830dc1b120f5dce398233454bac56821fa36262[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jul 1 11:27:14 2025 +0800
+
+    feat: 添加演示页面 Demo4-TicketBooking 和 Demo5-MovieRanking，更新组件库文档和配置
+
+[33mcommit 1d2c7d4329679574d0a104ee2fd902a1909632cb[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Fri Jun 27 12:21:59 2025 +0800
+
+    Add .cursor/ directory configuration
+
+[33mcommit e80e3d432d93ab291d55ae817cfed5694297151b[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Fri Jun 27 12:21:21 2025 +0800
+
+    Update documentation and dependencies
+
+[33mcommit cb86ee8e782f8f0e86033961167e02e9e65a3c4b[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Fri Jun 27 11:15:48 2025 +0800
+
+    Refactor project structure: move demos to separate folder and add form components
+    
+    - Moved demo components from src/components to src/demos/ for better organization
+    - Added comprehensive form component with validation
+    - Added form usage documentation
+    - Updated layout system documentation
+    - Enhanced button and input components
+    - Updated component exports and stories
+    - Improved page container layout functionality
+
+[33mcommit 8020821936497dd20ff4b6a9c78e2dbadad1b110[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Thu Jun 26 16:44:00 2025 +0800
+
+    Add new components and improvements
+    
+    - Added ButtonGroup, ColorPalette, Dropdown components
+    - Added Cascader dropdown and Toast feedback components
+    - Enhanced file upload, modal, and various input components
+    - Updated component exports and styling
+    - Added corresponding Storybook stories for new components
+
+[33mcommit 3f604bb4f38985af3d7f8234686ff66cec78482c[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Thu Jun 26 01:09:24 2025 +0800
+
+    feat: 添加新的UI组件和更新现有组件
+    
+    - 新增 loading 组件和对应的 stories
+    - 新增 skeleton 组件和对应的 stories
+    - 新增 top-nav 导航组件和对应的 stories
+    - 更新 avatar 组件
+    - 更新 page-container 布局组件
+    - 更新所有 Demo 页面组件
+    - 更新组件导出索引文件
+    - 更新相关 stories 文件
+    - 更新开发文档和依赖包
+
+[33mcommit 4e2f59610979398f94ae7cd1951a7fbd1638dbad[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Wed Jun 25 00:55:24 2025 +0800
+
+    refactor: 重组组件目录结构，将 input、textarea、typography 组件移动到合适的分类目录下
+
+[33mcommit 25a01302fe015d6d2b04fb9e06c9a59d6ace5f5b[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Wed Jun 25 00:22:33 2025 +0800
+
+    feat: 重构组件结构和新增多个数据录入组件
+    
+    - 重命名演示组件为更具描述性的名称
+    - 新增级联选择器(Cascader)组件
+    - 新增城市选择器(CitySelect)组件
+    - 新增标签输入(TagsInput)组件
+    - 新增简历编辑器演示组件
+    - 更新多个基础组件的功能和样式
+    - 完善组件故事书配置
+    - 更新布局系统文档
+
+[33mcommit ca3ae8981c6a02d63eb20eebf25a7a81cca20ada[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Tue Jun 24 13:50:33 2025 +0800
+
+    feat: 优化项目依赖和文档
+    
+    - 删除未使用的依赖包 (tailwindcss-motion, tailwind-scrollbar)
+    - 保留预留依赖包 (react-hook-form, zod, recharts, @hookform/resolvers)
+    - 大幅精简 README.md 文档，提高可读性
+    - 优化项目结构，减少包体积
+
+[33mcommit 33d47fe69725343a06de5925c3c086b90b2c2a06[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Mon Jun 23 17:52:10 2025 +0800
+
+    refactor: reorganize UI components and stories by functional categories
+    
+    - Create 6 functional categories: base, data-entry, navigation, feedback, data-display, layout
+    - Move 34 UI components to appropriate category directories
+    - Update all import/export paths in components and stories
+    - Maintain backward compatibility through unified index.ts exports
+    - Update Storybook titles to reflect new categorization
+    - Fix TypeScript type issues and remove unused code
+    
+    This reorganization improves:
+    ✅ Code discoverability and maintainability
+    ✅ Logical grouping of related components
+    ✅ Consistent project structure
+    ✅ Developer experience
+
+[33mcommit f9b38b2a3c6715d458e0ec3ae9865f1bbc00781b[m
+Merge: ff6e589 2e85c9a
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Mon Jun 23 14:52:29 2025 +0800
+
+    Merge remote repository files
+    
+    - Resolved conflicts in .gitignore and LICENSE
+    - Combined comprehensive Node.js gitignore with Vite specific rules
+    - Updated copyright to huluwa1991 (2025)
+
+[33mcommit ff6e589c9060b18bfbbc980850bc9750f9d1f819[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Mon Jun 23 14:50:47 2025 +0800
+
+    Initial commit: Complete design system with 30+ components
+    
+    - Added comprehensive component library with React + TypeScript + Tailwind CSS
+    - Included 30+ UI components: Button, Input, Alert, Avatar, Badge, etc.
+    - Added complete Storybook documentation for all components
+    - Set up modern development environment with Vite
+    - Added component development SOP and comprehensive README
+    - Configured TypeScript, ESLint, and Prettier
+    - Ready for production use
+
+[33mcommit 2e85c9ad923bcea3833d53f88617677cb2224f71[m
+Author: huluwa1991 <wave8975752@gmail.com>
+Date:   Mon Jun 23 08:48:15 2025 +0200
+
+    Initial commit
+
+[33mcommit ee5d97605a802dd1ca4e52c143cdd42287114c93[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Mon May 13 12:50:27 2024 +0600
+
+    fix: readme typo
+
+[33mcommit 3899ee335fb1de27a0b329a9241bf7f0f5b0f6bc[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Mon May 13 12:49:32 2024 +0600
+
+    chore: remove unused component
+
+[33mcommit afbca2233a738708e381cff7ee4e1f02ae379a45[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Mon May 13 12:47:39 2024 +0600
+
+    add blog post link
+
+[33mcommit b67eaa79f62edbd44eb32249b726f6c8dfe579d6[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Sun May 12 14:45:57 2024 +0600
+
+    update readme
+
+[33mcommit 515f6819d5553f9e96e946f571b7346d65f0eb5b[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Sun May 12 14:30:56 2024 +0600
+
+    rever to default colors
+
+[33mcommit 78798c0deef3d13e830bab2df3747a5b91cbb4bf[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Sat May 11 23:38:48 2024 +0600
+
+    wip
+
+[33mcommit 39e5aa89f9ec33c66a9fb1bfb574b4663781a69b[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Fri May 10 18:23:06 2024 +0600
+
+    prettier
+
+[33mcommit edbb45fe95dbea089b1fcc5e64fae8dbf01c5ddf[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Fri May 10 17:34:25 2024 +0600
+
+    add typography
+
+[33mcommit 63bee84a42fc7302eb7da7096b5a7dc39359006c[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Fri May 10 01:42:01 2024 +0600
+
+    add typography
+
+[33mcommit 67423e9d5aa03b1a8c06155b7a9333b541acea32[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Wed May 8 17:17:32 2024 +0600
+
+    update dark mode primary colors
+
+[33mcommit b4f9739a0789983a13dcbb6ce1d3dbe897608ae0[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Wed May 8 15:24:11 2024 +0600
+
+    add storybook dark mode support
+
+[33mcommit cac0e7162752e01e113a309cd5f3f5641e29ea27[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Wed May 8 13:36:06 2024 +0600
+
+    add theme and dark mode
+
+[33mcommit 653d8e4ebfa5c528ace1d289ac5c76ba9944caa1[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Wed May 8 12:42:56 2024 +0600
+
+    change primary color
+
+[33mcommit 60b9531b4330b338ca2c1bb3e3816fef9adf2b15[m
+Author: Shaikat Haque <shaikathaque4@gmail.com>
+Date:   Wed May 8 12:35:17 2024 +0600
+
+    add storybook
+
+[33mcommit afdb9159b89f71bd596dc04e16e8879e2f9a8654[m
+Author: Shaikat Haque <shaikat@Shaikats-MacBook-Pro.local>
+Date:   Tue May 7 15:34:05 2024 +0600
+
+    initial commit
