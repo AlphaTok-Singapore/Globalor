@@ -65,7 +65,7 @@ function AlphaMindLayoutContent({
   currentTaskId = null
 }: AlphaMindLayoutProps) {
   const { t, isLanguageDialogVisible, hideLanguageDialog, suggestedLanguage, setLanguage } = useLanguage();
-  const [isTaskListCollapsed, setIsTaskListCollapsed] = useState(false);
+  const [isTaskListCollapsed, setIsTaskListCollapsed] = useState(true);
   const [isHovering, setIsHovering] = useState(false);
   const [welcomeInputValue, setWelcomeInputValue] = useState('');
   const [currentPage, setCurrentPage] = useState('chat');
@@ -202,6 +202,14 @@ function AlphaMindLayoutContent({
     setEmailDialogType('');
   };
 
+  const clearAllSelections = () => {
+    setSelectedAction(null);
+    setSelectedPlatforms([]);
+    setCurrentPlatformIndex(0);
+    setYoutubeUrl('');
+    setYoutubeVideoId('');
+  };
+
   const handleWelcomeModeChange = (mode: 'public' | 'private') => {
     setWelcomeMode(mode);
     if (mode === 'private') {
@@ -274,7 +282,7 @@ function AlphaMindLayoutContent({
         setYoutubeUrl('');
         setYoutubeVideoId('');
       }
-      onAction(actionId);
+    onAction(actionId);
       return next;
     });
   };
@@ -680,6 +688,7 @@ function AlphaMindLayoutContent({
               mode={chatMode}
               onModeChange={handleChatModeChange}
               onAction={handleAction}
+              selectedPlatforms={selectedPlatforms}
             />
           </div>
         </>
@@ -700,14 +709,36 @@ function AlphaMindLayoutContent({
                   onChange={(e) => setWelcomeInputValue(e.target.value)}
                   onKeyPress={handleWelcomeKeyPress}
                   placeholder={t.chat.inputPlaceholder}
-                  className="w-full h-16 text-lg px-6 py-4 pr-14 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
+                  className="w-full h-16 text-lg px-12 py-4 pr-24 rounded-lg border border-input bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent"
                 />
+                {/* Plus icon at the beginning */}
+                <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                  <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-gray-500 hover:text-gray-700">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                  </Button>
+                </div>
+                {/* Voice input icon */}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-14 top-1/2 transform -translate-y-1/2 h-8 w-8 p-0 text-gray-500 hover:text-gray-700"
+                >
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="12" y1="19" x2="12" y2="23" />
+                    <line strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} x1="8" y1="23" x2="16" y2="23" />
+                  </svg>
+                </Button>
+                {/* Send button */}
                 <Button
                   onClick={handleWelcomeSend}
                   disabled={!welcomeInputValue.trim()}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 h-10 w-10 p-0 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-colors flex items-center justify-center"
                 >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="h-4 w-4 rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
                   </svg>
                 </Button>
@@ -716,16 +747,18 @@ function AlphaMindLayoutContent({
             {/* Public / Private toggle under welcome input */}
             <div className="flex items-center justify-center gap-3">
               <Button
-                variant={welcomeMode === 'public' ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
                 onClick={() => handleWelcomeModeChange('public')}
+                className={welcomeMode === 'public' ? 'bg-gray-200 text-gray-900' : 'text-gray-600'}
               >
                 Public
               </Button>
               <Button
-                variant={welcomeMode === 'private' ? 'default' : 'ghost'}
+                variant="ghost"
                 size="sm"
                 onClick={() => handleWelcomeModeChange('private')}
+                className={welcomeMode === 'private' ? 'bg-gray-200 text-gray-900' : 'text-gray-600'}
               >
                 Private
               </Button>
@@ -897,10 +930,10 @@ function AlphaMindLayoutContent({
                 )}
               </div>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-center">
               <Button variant="ghost" size="sm" className="text-muted-foreground">
                 <span className="text-sm">Explore use cases</span>
-                <ChevronUp className="h-3 w-3 ml-1" />
+                <ChevronDown className="h-3 w-3 ml-1" />
               </Button>
             </div>
           </div>
@@ -952,7 +985,7 @@ function AlphaMindLayoutContent({
                       播放
                     </Button>
                   </div>
-                </div>
+                  </div>
               )}
 
               {/* Video Player or Social Media Content */}
@@ -967,7 +1000,7 @@ function AlphaMindLayoutContent({
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                     ></iframe>
-                  </div>
+                </div>
                   <div className="mt-3">
                     <div className="text-sm font-medium mb-1">YouTube 视频播放</div>
                     <div className="text-xs text-gray-600">正在播放: {youtubeUrl}</div>
@@ -993,7 +1026,7 @@ function AlphaMindLayoutContent({
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setSelectedAction(null)}
+              onClick={clearAllSelections}
               className="h-8 w-8 p-0 rounded-full bg-white shadow-lg hover:shadow-xl transition-all"
               title="Close"
             >
@@ -1048,17 +1081,17 @@ function AlphaMindLayoutContent({
         }`}>
           {/* Phone Header */}
           {!(selectedAction === 'youtube' && youtubeVideoId) && (
-            <div className="bg-gray-100 px-6 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                <span className="text-sm font-medium">9:41</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-                <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
-              </div>
+          <div className="bg-gray-100 px-6 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+              <span className="text-sm font-medium">9:41</span>
             </div>
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+              <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+              <div className="w-2 h-2 bg-gray-600 rounded-full"></div>
+            </div>
+          </div>
           )}
 
 
@@ -1079,9 +1112,9 @@ function AlphaMindLayoutContent({
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
-                </div>
               </div>
             </div>
+          </div>
           ) : (
             <div className="p-0 w-full h-full overflow-auto">{renderPlatformHome(true)}</div>
           )}
@@ -1106,7 +1139,7 @@ function AlphaMindLayoutContent({
     const datasetKey = mapCategoryToDataset(emailCategory);
     const items = emailData[datasetKey];
     return (
-      <div className="w-[420px] border-l border-border px-4">
+      <div className="w-[520px] border-l border-border px-4">
         {/* Top options bar with folders and contacts */}
         <div className="sticky top-0 bg-background z-10 py-3 border-b border-border">
           <div className="flex items-center justify-between gap-3">
@@ -1136,7 +1169,7 @@ function AlphaMindLayoutContent({
 
         {/* Content: contacts or emails */}
         {showContacts ? (
-          <div className="py-3 space-y-2 overflow-y-auto">
+          <div className="py-3 overflow-y-auto">
             {contactsList.map((c) => (
               <div key={c.email} className="p-3 rounded-md border border-border hover:bg-muted cursor-pointer">
                 <div className="flex items-center gap-2 min-w-0 mb-1">
@@ -1152,7 +1185,7 @@ function AlphaMindLayoutContent({
             )}
           </div>
         ) : (
-          <div className="py-3 space-y-2 overflow-y-auto">
+          <div className="py-3 overflow-y-auto">
             {items.map((m) => (
               <div
                 key={m.id}

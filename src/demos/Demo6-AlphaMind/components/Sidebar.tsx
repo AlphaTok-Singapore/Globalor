@@ -191,7 +191,7 @@ export function Sidebar({
                     </Typography>
                   </div>
                   <Typography variant="body" className="text-xs text-sidebar-muted-foreground mb-2 line-clamp-2">
-                    {task.messages.length} 条消息
+                    {task.messages.length} {t.chat.messages || 'messages'}
                   </Typography>
                   <div className="flex items-center gap-2 text-xs text-sidebar-muted-foreground">
                     <Clock className="h-3 w-3" />

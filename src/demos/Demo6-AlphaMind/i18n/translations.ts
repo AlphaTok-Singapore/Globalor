@@ -68,6 +68,8 @@ export interface Translation {
     shareTitle: string;
     shareSubtitle: string;
     learnMore: string;
+    messages: string;
+    conversation: string;
   };
 
   // 动作按钮
@@ -161,6 +163,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'Share AlphaMind with a friend',
       shareSubtitle: 'Get 500 credits each',
       learnMore: 'Learn more',
+      messages: 'messages',
+      conversation: 'Conversation',
     },
     actions: {
       image: 'Image',
@@ -247,6 +251,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: '与朋友分享 AlphaMind',
       shareSubtitle: '每人获得 500 积分',
       learnMore: '了解更多',
+      messages: '条消息',
+      conversation: '对话',
     },
     actions: {
       image: '图片',

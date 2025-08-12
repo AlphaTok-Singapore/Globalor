@@ -10,6 +10,7 @@ interface InputAreaProps {
   mode?: 'public' | 'private';
   onModeChange?: (mode: 'public' | 'private') => void;
   onAction?: (actionId: string) => void;
+  selectedPlatforms?: string[];
 }
 
 export function InputArea({ 
@@ -17,7 +18,8 @@ export function InputArea({
   placeholder = "Ask anything...",
   mode = 'public',
   onModeChange = () => {},
-  onAction = () => {}
+  onAction = () => {},
+  selectedPlatforms = []
 }: InputAreaProps) {
   const [inputValue, setInputValue] = useState('');
 
@@ -76,23 +78,25 @@ export function InputArea({
       {/* Mode toggle under input */}
       <div className="flex items-center gap-2">
         <Button
-          variant={mode === 'public' ? 'default' : 'ghost'}
+          variant="ghost"
           size="sm"
           onClick={() => handleModeChange('public')}
+          className={mode === 'public' ? 'bg-gray-200 text-gray-900' : 'text-gray-600'}
         >
           Public
         </Button>
         <Button
-          variant={mode === 'private' ? 'default' : 'ghost'}
+          variant="ghost"
           size="sm"
           onClick={() => handleModeChange('private')}
+          className={mode === 'private' ? 'bg-gray-200 text-gray-900' : 'text-gray-600'}
         >
           Private
         </Button>
       </div>
 
       {/* Action buttons under input - switch by mode */}
-      <ActionButtons mode={mode} onAction={onAction} />
+      <ActionButtons mode={mode} onAction={onAction} selectedPlatforms={selectedPlatforms} />
     </div>
   );
 } 

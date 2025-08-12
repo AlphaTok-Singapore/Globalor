@@ -19,19 +19,15 @@ import { Button } from '@/components/ui/base/button';
 interface ActionButtonsProps {
   onAction?: (actionId: string) => void;
   mode?: 'public' | 'private';
+  selectedPlatforms?: string[];
 }
 
-export function ActionButtons({ onAction = () => {}, mode = 'public' }: ActionButtonsProps) {
-  const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
-
+export function ActionButtons({ 
+  onAction = () => {}, 
+  mode = 'public',
+  selectedPlatforms = []
+}: ActionButtonsProps) {
   const togglePlatform = (platform: string) => {
-    setSelectedPlatforms((prev) => {
-      if (mode === 'private') {
-        // Single-select in private mode
-        return [platform];
-      }
-      return prev.includes(platform) ? prev.filter((p) => p !== platform) : [...prev, platform];
-    });
     onAction(platform);
   };
 

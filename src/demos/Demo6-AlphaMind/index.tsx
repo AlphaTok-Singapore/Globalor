@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AlphaMindLayout } from './components/AlphaMindLayout';
 import { ChatMessage, User } from './types';
+import { useLanguage } from './contexts/LanguageContext';
 
 // 模拟用户数据
 const mockUser: User = {
@@ -32,7 +33,7 @@ export function AlphaMindPage() {
       // 如果没有活跃任务，创建一个新任务
       const newTask: Task = {
         id: Date.now().toString(),
-        title: `对话 ${tasks.length + 1}`,
+        title: `${t.chat.conversation} ${tasks.length + 1}`,
         messages: [],
         createdAt: new Date(),
         isActive: true,
@@ -86,7 +87,7 @@ export function AlphaMindPage() {
     // 创建新任务
     const newTask: Task = {
       id: Date.now().toString(),
-      title: `对话 ${tasks.length + 1}`,
+      title: `${t.chat.conversation} ${tasks.length + 1}`,
       messages: [],
       createdAt: new Date(),
       isActive: true,
