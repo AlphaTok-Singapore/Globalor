@@ -71,6 +71,20 @@ export interface Translation {
     messages: string;
     conversation: string;
   };
+  // CRM 界面
+  crm: {
+    customerInfo: string;
+    customerInfoDetails: string[];
+    salesManagement: string;
+    salesManagementDetails: string[];
+    contactManagement: string;
+    contactManagementDetails: string[];
+    taskManagement: string;
+    taskManagementDetails: string[];
+    reportsAnalysis: string;
+    reportsAnalysisDetails: string[];
+    view: string;
+  };
 
   // 动作按钮
   actions: {
@@ -166,6 +180,19 @@ export const translations: Record<string, Translation> = {
       messages: 'messages',
       conversation: 'Conversation',
     },
+    crm: {
+      customerInfo: 'Customer Information Management',
+      customerInfoDetails: ['Name/Phone/Email/Address/Company/Position', 'Customer Classification & Tags', 'Interaction History: Calls/Emails/Meetings'],
+      salesManagement: 'Sales Management',
+      salesManagementDetails: ['Lead (Leads) Source/Conversion', 'Opportunity (Opportunities) Stage & Expected Revenue', 'Sales Pipeline Visualization'],
+      contactManagement: 'Contact Management',
+      contactManagementDetails: ['Multiple Contact Roles/Preferences', 'Contact & Company/Opportunity Association'],
+      taskManagement: 'Task & Activity Management',
+      taskManagementDetails: ['Follow-up Calls/Emails/Meetings', 'Schedule Reminders'],
+      reportsAnalysis: 'Reports & Analysis',
+      reportsAnalysisDetails: ['Sales Performance/Conversion Rate/Revenue Forecast', 'Customer Behavior Analysis (High-Value/Churn)', 'Charts & Dashboards'],
+      view: 'View',
+    },
     actions: {
       image: 'Image',
       slides: 'Slides',
@@ -253,6 +280,19 @@ export const translations: Record<string, Translation> = {
       learnMore: '了解更多',
       messages: '条消息',
       conversation: '对话',
+    },
+    crm: {
+      customerInfo: '客户信息管理',
+      customerInfoDetails: ['姓名/电话/邮箱/地址/公司/职位', '客户分类与标签', '交互历史：通话/邮件/会议'],
+      salesManagement: '销售管理',
+      salesManagementDetails: ['线索（Leads）来源/转化', '商机（Opportunities）阶段与预计收入', '销售管道（Pipeline）可视化'],
+      contactManagement: '联系人管理',
+      contactManagementDetails: ['多联系人角色/偏好', '联系人与公司/商机关联'],
+      taskManagement: '任务和活动管理',
+      taskManagementDetails: ['跟进电话/邮件/会议', '日程提醒'],
+      reportsAnalysis: '报表与分析',
+      reportsAnalysisDetails: ['销售业绩/转化率/收入预测', '客户行为分析（高价值/流失）', '图表与仪表盘'],
+      view: '查看',
     },
     actions: {
       image: '图片',

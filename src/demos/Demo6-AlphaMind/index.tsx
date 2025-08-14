@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AlphaMindLayout } from './components/AlphaMindLayout';
 import { ChatMessage, User } from './types';
 import { useLanguage } from './contexts/LanguageContext';
+import { LanguageProvider } from './contexts/LanguageContext';
 
 // 模拟用户数据
 const mockUser: User = {
@@ -20,7 +21,8 @@ interface Task {
   isActive: boolean;
 }
 
-export function AlphaMindPage() {
+function AlphaMindPageContent() {
+  const { t, currentLanguage } = useLanguage();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [currentTaskId, setCurrentTaskId] = useState<string | null>(null);
 
@@ -29,7 +31,9 @@ export function AlphaMindPage() {
   const messages = currentTask?.messages || [];
 
   const handleSendMessage = (message: string) => {
-    if (!currentTaskId) {
+    let taskId = currentTaskId;
+    
+    if (!taskId) {
       // 如果没有活跃任务，创建一个新任务
       const newTask: Task = {
         id: Date.now().toString(),
@@ -40,6 +44,7 @@ export function AlphaMindPage() {
       };
       setTasks(prev => [...prev, newTask]);
       setCurrentTaskId(newTask.id);
+      taskId = newTask.id;
     }
 
     const newMessage: ChatMessage = {
@@ -51,7 +56,7 @@ export function AlphaMindPage() {
     
     // 更新当前任务的消息
     setTasks(prev => prev.map(task => 
-      task.id === currentTaskId 
+      task.id === taskId 
         ? { ...task, messages: [...task.messages, newMessage] }
         : task
     ));
@@ -60,12 +65,14 @@ export function AlphaMindPage() {
     setTimeout(() => {
       const aiResponse: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        content: `我收到了您的消息："${message}"。这是一个很好的问题！我可以帮您解决这个问题。`,
+        content: currentLanguage === 'English' 
+          ? `I received your message: "${message}". This is a great question! I can help you solve this problem.`
+          : `我收到了您的消息："${message}"。这是一个很好的问题！我可以帮您解决这个问题。`,
         type: 'assistant',
         timestamp: new Date(),
       };
       setTasks(prev => prev.map(task => 
-        task.id === currentTaskId 
+        task.id === taskId 
           ? { ...task, messages: [...task.messages, aiResponse] }
           : task
       ));
@@ -117,5 +124,13 @@ export function AlphaMindPage() {
       tasks={tasks}
       currentTaskId={currentTaskId}
     />
+  );
+}
+
+export function AlphaMindPage() {
+  return (
+    <LanguageProvider>
+      <AlphaMindPageContent />
+    </LanguageProvider>
   );
 } 

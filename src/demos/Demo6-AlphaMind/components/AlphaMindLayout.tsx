@@ -346,6 +346,8 @@ function AlphaMindLayoutContent({
     if (welcomeInputValue.trim()) {
       onSendMessage(welcomeInputValue);
       setWelcomeInputValue('');
+      // Trigger new task creation when sending from welcome page
+      onNewTask();
     }
   };
 
@@ -603,8 +605,8 @@ function AlphaMindLayoutContent({
     if (selectedAction === 'email' && selectedEmail && selectedEmailThread.length > 0) {
       return (
         <>
-          <div className="flex-1 min-h-0 p-4">
-            <div className="max-w-3xl space-y-3">
+          <div className="flex-1 min-h-0 flex justify-center">
+            <div className="max-w-3xl w-full space-y-3 p-4">
               <div className="flex items-center justify-between">
                 <div className="text-lg font-semibold truncate">{selectedEmail.contact} · {selectedEmail.subject}</div>
                 <div className="text-xs text-muted-foreground">{selectedEmail.time}</div>
@@ -648,8 +650,8 @@ function AlphaMindLayoutContent({
     if (selectedAction === 'crm' && selectedCrmTopic) {
       return (
         <>
-          <div className="flex-1 min-h-0 p-4">
-            <div className="max-w-3xl space-y-3">
+          <div className="flex-1 min-h-0 flex justify-center">
+            <div className="max-w-3xl w-full space-y-3 p-4">
               <div className="flex items-center justify-between">
                 <div className="text-lg font-semibold truncate">{selectedCrmTopic}</div>
                 <div className="text-xs text-muted-foreground">概览</div>
@@ -697,8 +699,8 @@ function AlphaMindLayoutContent({
       return (
         <div className="flex-1 flex flex-col items-center justify-center p-8">
           <div className="text-center space-y-8 max-w-4xl mb-12">
-            <h1 className="text-6xl font-bold text-foreground">{t.chat.welcome}</h1>
-            <p className="text-muted-foreground text-2xl">{t.chat.welcomeSubtitle}</p>
+            <h1 className="text-3xl font-semibold text-foreground">{t.chat.welcome}</h1>
+            <p className="text-muted-foreground text-lg">{t.chat.welcomeSubtitle}</p>
           </div>
           <div className="w-full max-w-4xl space-y-6">
             <div className="flex items-center justify-center gap-3 p-8 bg-background">
@@ -1297,33 +1299,48 @@ function AlphaMindLayoutContent({
               <div className="w-[420px] border-l border-border px-4 py-4 overflow-y-auto">
                 <div className="space-y-4">
                   <div>
-                    <div className="text-lg font-semibold mb-2">客户信息管理</div>
+                    <div className="text-lg font-semibold mb-2">{t.crm?.customerInfo || '客户信息管理'}</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('客户信息管理'); setSelectedCrmDetails(['姓名/电话/邮箱/地址/公司/职位','客户分类与标签','交互历史：通话/邮件/会议']); }}>查看</Button>
+                      <Button variant="outline" size="sm" onClick={() => { 
+                        setSelectedCrmTopic(t.crm?.customerInfo || '客户信息管理'); 
+                        setSelectedCrmDetails(t.crm?.customerInfoDetails || ['姓名/电话/邮箱/地址/公司/职位','客户分类与标签','交互历史：通话/邮件/会议']); 
+                      }}>{t.crm?.view || '查看'}</Button>
                     </div>
                   </div>
                   <div>
-                    <div className="text-lg font-semibold mb-2">销售管理</div>
+                    <div className="text-lg font-semibold mb-2">{t.crm?.salesManagement || '销售管理'}</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('销售管理'); setSelectedCrmDetails(['线索（Leads）来源/转化','商机（Opportunities）阶段与预计收入','销售管道（Pipeline）可视化']); }}>查看</Button>
+                      <Button variant="outline" size="sm" onClick={() => { 
+                        setSelectedCrmTopic(t.crm?.salesManagement || '销售管理'); 
+                        setSelectedCrmDetails(t.crm?.salesManagementDetails || ['线索（Leads）来源/转化','商机（Opportunities）阶段与预计收入','销售管道（Pipeline）可视化']); 
+                      }}>{t.crm?.view || '查看'}</Button>
                     </div>
                   </div>
                   <div>
-                    <div className="text-lg font-semibold mb-2">联系人管理</div>
+                    <div className="text-lg font-semibold mb-2">{t.crm?.contactManagement || '联系人管理'}</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('联系人管理'); setSelectedCrmDetails(['多联系人角色/偏好','联系人与公司/商机关联']); }}>查看</Button>
+                      <Button variant="outline" size="sm" onClick={() => { 
+                        setSelectedCrmTopic(t.crm?.contactManagement || '联系人管理'); 
+                        setSelectedCrmDetails(t.crm?.contactManagementDetails || ['多联系人角色/偏好','联系人与公司/商机关联']); 
+                      }}>{t.crm?.view || '查看'}</Button>
                     </div>
                   </div>
                   <div>
-                    <div className="text-lg font-semibold mb-2">任务和活动管理</div>
+                    <div className="text-lg font-semibold mb-2">{t.crm?.taskManagement || '任务和活动管理'}</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('任务和活动管理'); setSelectedCrmDetails(['跟进电话/邮件/会议','日程提醒']); }}>查看</Button>
+                      <Button variant="outline" size="sm" onClick={() => { 
+                        setSelectedCrmTopic(t.crm?.taskManagement || '任务和活动管理'); 
+                        setSelectedCrmDetails(t.crm?.taskManagementDetails || ['跟进电话/邮件/会议','日程提醒']); 
+                      }}>{t.crm?.view || '查看'}</Button>
                     </div>
                   </div>
                   <div>
-                    <div className="text-lg font-semibold mb-2">报表与分析</div>
+                    <div className="text-lg font-semibold mb-2">{t.crm?.reportsAnalysis || '报表与分析'}</div>
                     <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" size="sm" onClick={() => { setSelectedCrmTopic('报表与分析'); setSelectedCrmDetails(['销售业绩/转化率/收入预测','客户行为分析（高价值/流失）','图表与仪表盘']); }}>查看</Button>
+                      <Button variant="outline" size="sm" onClick={() => { 
+                        setSelectedCrmTopic(t.crm?.reportsAnalysis || '报表与分析'); 
+                        setSelectedCrmDetails(t.crm?.reportsAnalysisDetails || ['销售业绩/转化率/收入预测','客户行为分析（高价值/流失）','图表与仪表盘']); 
+                      }}>{t.crm?.view || '查看'}</Button>
                     </div>
                   </div>
                 </div>

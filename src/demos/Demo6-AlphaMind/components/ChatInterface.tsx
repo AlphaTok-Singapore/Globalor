@@ -50,13 +50,13 @@ export function ChatInterface({ messages, isSplitLayout = false }: ChatInterface
       {/* 聊天消息容器 - 固定高度，可滚动 */}
       <div 
         ref={chatContainerRef}
-        className="flex-1 overflow-y-auto p-8"
+        className="flex-1 overflow-y-auto p-8 flex justify-center"
         style={{ 
           height: getChatContainerHeight(),
           maxHeight: getChatContainerHeight()
         }}
       >
-        <div className="max-w-5xl mx-auto space-y-8">
+        <div className="max-w-5xl space-y-8 w-full">
           {messages.map((message) => (
             <div
               key={message.id}
