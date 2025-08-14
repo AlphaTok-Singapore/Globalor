@@ -379,6 +379,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'Kongsi AlphaMind dengan rakan',
       shareSubtitle: 'Dapatkan 500 kredit setiap orang',
       learnMore: 'Ketahui lebih lanjut',
+      messages: 'Mesej',
+      conversation: 'Perbualan',
     },
     actions: {
       image: 'Imej',
@@ -551,6 +553,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'Bagikan AlphaMind dengan teman',
       shareSubtitle: 'Dapatkan 500 kredit masing-masing',
       learnMore: 'Pelajari lebih lanjut',
+      messages: 'Pesan',
+      conversation: 'Percakapan',
     },
     actions: {
       image: 'Gambar',
@@ -637,6 +641,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'Chia sẻ AlphaMind với bạn bè',
       shareSubtitle: 'Nhận 500 tín dụng mỗi người',
       learnMore: 'Tìm hiểu thêm',
+      messages: 'Tin nhắn',
+      conversation: 'Cuộc trò chuyện',
     },
     actions: {
       image: 'Hình ảnh',
@@ -723,6 +729,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'I-share ang AlphaMind sa kaibigan',
       shareSubtitle: 'Kumuha ng 500 credits bawat isa',
       learnMore: 'Matuto pa',
+      messages: 'Mga Mensahe',
+      conversation: 'Pag-uusap',
     },
     actions: {
       image: 'Image',
@@ -809,6 +817,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'दोस्त के साथ AlphaMind साझा करें',
       shareSubtitle: 'प्रत्येक को 500 क्रेडिट मिलें',
       learnMore: 'और जानें',
+      messages: 'संदेश',
+      conversation: 'बातचीत',
     },
     actions: {
       image: 'छवि',
@@ -895,6 +905,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: '친구와 AlphaMind 공유',
       shareSubtitle: '각각 500 크레딧 받기',
       learnMore: '더 알아보기',
+      messages: '메시지',
+      conversation: '대화',
     },
     actions: {
       image: '이미지',
@@ -981,6 +993,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: '友達とAlphaMindを共有',
       shareSubtitle: 'それぞれ500クレジットを獲得',
       learnMore: '詳細を見る',
+      messages: 'メッセージ',
+      conversation: '会話',
     },
     actions: {
       image: '画像',
@@ -1067,6 +1081,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'شارك AlphaMind مع صديق',
       shareSubtitle: 'احصل على 500 رصيد لكل منهما',
       learnMore: 'اعرف المزيد',
+      messages: 'الرسائل',
+      conversation: 'المحادثة',
     },
     actions: {
       image: 'الصورة',
@@ -1153,6 +1169,8 @@ export const translations: Record<string, Translation> = {
       shareTitle: 'שתף AlphaMind עם חבר',
       shareSubtitle: 'קבל 500 נקודות לכל אחד',
       learnMore: 'למד עוד',
+      messages: 'הודעות',
+      conversation: 'שיחה',
     },
     actions: {
       image: 'תמונה',
