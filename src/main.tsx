@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
+import { HashRouter, Routes, Route, Link } from 'react-router-dom'
 import './index.css'
 import { AlphaMindPage } from './demos/Demo6-AlphaMind/index'
 
@@ -162,13 +162,13 @@ const HomePage = () => {
 // 主应用组件
 const App = () => {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/" element={<AlphaMindPage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/alphamind" element={<AlphaMindPage />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }
 
