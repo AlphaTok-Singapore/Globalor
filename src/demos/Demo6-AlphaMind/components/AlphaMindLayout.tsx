@@ -5,7 +5,6 @@ import { Typography } from '@/components/ui/base/typography';
 import { 
   DoorOpen, 
   DoorClosed, 
-  ChevronUp,
   ChevronDown,
   Maximize2,
   X,
