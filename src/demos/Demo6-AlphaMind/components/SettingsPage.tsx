@@ -48,16 +48,16 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl shadow-2xl w-[800px] h-[600px] flex overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-2xl w-[900px] h-[650px] flex overflow-hidden">
         {/* Left Sidebar */}
         <div className="w-64 bg-gray-50 p-6 flex flex-col">
           {/* Logo */}
           <div className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-400 to-purple-500 rounded flex items-center justify-center">
-              <span className="text-white text-sm font-bold">A</span>
+              <span className="text-white text-sm font-bold">m</span>
             </div>
             <Typography variant="body" className="font-semibold text-lg">
-              AlphaMind
+              manus
             </Typography>
           </div>
 
@@ -162,15 +162,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     }`}
                     onClick={() => setTheme('Light')}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <Sun className="h-4 w-4 text-gray-600" />
-                      <Typography variant="body" className="font-medium">{t.settings.light}</Typography>
+                    <div className="h-16 bg-white border border-gray-200 rounded mb-2 flex items-center justify-center">
+                      <div className="space-y-1 w-8">
+                        <div className="h-1 bg-gray-300 rounded"></div>
+                        <div className="h-1 bg-gray-300 rounded"></div>
+                        <div className="h-1 bg-gray-300 rounded w-2/3"></div>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <div className="h-2 bg-gray-200 rounded"></div>
-                      <div className="h-2 bg-gray-200 rounded"></div>
-                      <div className="h-2 bg-gray-200 rounded w-2/3"></div>
-                    </div>
+                    <Typography variant="body" className="text-sm text-center">{t.settings.light}</Typography>
                   </div>
 
                   <div
@@ -181,15 +180,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     }`}
                     onClick={() => setTheme('Dark')}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <Moon className="h-4 w-4 text-gray-600" />
-                      <Typography variant="body" className="font-medium">{t.settings.dark}</Typography>
+                    <div className="h-16 bg-gray-800 border border-gray-600 rounded mb-2 flex items-center justify-center">
+                      <div className="space-y-1 w-8">
+                        <div className="h-1 bg-gray-500 rounded"></div>
+                        <div className="h-1 bg-gray-500 rounded"></div>
+                        <div className="h-1 bg-gray-500 rounded w-2/3"></div>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <div className="h-2 bg-gray-600 rounded"></div>
-                      <div className="h-2 bg-gray-600 rounded"></div>
-                      <div className="h-2 bg-gray-600 rounded w-2/3"></div>
-                    </div>
+                    <Typography variant="body" className="text-sm text-center">{t.settings.dark}</Typography>
                   </div>
 
                   <div
@@ -200,15 +198,14 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                     }`}
                     onClick={() => setTheme('Follow System')}
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <Monitor className="h-4 w-4 text-gray-600" />
-                      <Typography variant="body" className="font-medium">{t.settings.followSystem}</Typography>
+                    <div className="h-16 bg-gradient-to-r from-white to-gray-800 border border-gray-300 rounded mb-2 flex items-center justify-center">
+                      <div className="space-y-1 w-8">
+                        <div className="h-1 bg-gray-300 rounded"></div>
+                        <div className="h-1 bg-gray-500 rounded"></div>
+                        <div className="h-1 bg-gray-300 rounded w-2/3"></div>
+                      </div>
                     </div>
-                    <div className="space-y-1">
-                      <div className="h-2 bg-gray-200 rounded"></div>
-                      <div className="h-2 bg-gray-600 rounded"></div>
-                      <div className="h-2 bg-gray-200 rounded w-2/3"></div>
-                    </div>
+                    <Typography variant="body" className="text-sm text-center">{t.settings.followSystem}</Typography>
                   </div>
                 </div>
               </div>
@@ -219,16 +216,6 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                   {t.settings.personalization}
                 </Typography>
                 <div className="space-y-4">
-                  {/* Import File */}
-                  <div className="flex items-center justify-between">
-                    <Typography variant="body" className="font-medium">
-                      Import configuration
-                    </Typography>
-                    <label className="inline-flex items-center gap-2 px-3 py-2 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50">
-                      <input type="file" className="hidden" />
-                      <span className="text-sm">Import file</span>
-                    </label>
-                  </div>
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
                       <Typography variant="body" className="font-medium">
@@ -238,14 +225,18 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                         {t.settings.receiveExclusiveContentDesc}
                       </Typography>
                     </div>
-                    <Button
-                      variant={exclusiveContent ? "default" : "outline"}
-                      size="sm"
+                    <div
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                        exclusiveContent ? 'bg-blue-500' : 'bg-gray-200'
+                      }`}
                       onClick={() => setExclusiveContent(!exclusiveContent)}
-                      className={`h-8 px-3 ${exclusiveContent ? 'bg-blue-500' : ''}`}
                     >
-                      {exclusiveContent ? 'On' : 'Off'}
-                    </Button>
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          exclusiveContent ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -257,14 +248,18 @@ export function SettingsPage({ onClose }: SettingsPageProps) {
                         {t.settings.emailNotificationsDesc}
                       </Typography>
                     </div>
-                    <Button
-                      variant={emailNotifications ? "default" : "outline"}
-                      size="sm"
+                    <div
+                      className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
+                        emailNotifications ? 'bg-blue-500' : 'bg-gray-200'
+                      }`}
                       onClick={() => setEmailNotifications(!emailNotifications)}
-                      className={`h-8 px-3 ${emailNotifications ? 'bg-blue-500' : ''}`}
                     >
-                      {emailNotifications ? 'On' : 'Off'}
-                    </Button>
+                      <span
+                        className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                          emailNotifications ? 'translate-x-6' : 'translate-x-1'
+                        }`}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
