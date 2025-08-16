@@ -1363,7 +1363,7 @@ function AlphaMindLayoutContent({
       )}
 
       {/* Settings Dialog */}
-      {showSettings && (<SettingsPage onClose={handleCloseSettings} />)}
+      {showSettings && <SettingsPage onClose={handleCloseSettings} />}
 
       {/* Language Dialog */}
       <LanguageDialog

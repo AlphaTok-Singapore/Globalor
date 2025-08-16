@@ -309,7 +309,7 @@ export function Sidebar({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => onNavigate('settings')}
+            onClick={onOpenSettings}
             className={`h-10 w-10 p-0 rounded-lg ${
               currentPage === 'settings' 
                 ? 'bg-sidebar-accent text-sidebar-accent-foreground' 

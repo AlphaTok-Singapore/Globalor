@@ -27,5 +27,12 @@ export const Default: Story = {
         story: 'AlphaMind AI 助手的完整界面，包含聊天、任务管理、手机预览等功能。',
       },
     },
+    actions: { argTypesRegex: '^on.*' },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/,
+      },
+    },
   },
 }; 
